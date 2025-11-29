@@ -1,0 +1,418 @@
+/* --- CSS VARIABLES & RESET --- */
+:root {
+    --win-gray: #c0c0c0;
+    --win-dark-gray: #808080;
+    --win-darker-gray: #404040;
+    --win-light: #ffffff;
+    --win-blue-title: #000080;
+    --win-blue-select: #000080;
+    --win-teal-bg: #008080;
+}
+
+* { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+body {
+    margin: 0; padding: 0;
+    width: 100vw; height: 100vh;
+    background-color: var(--win-teal-bg);
+    font-family: 'Segoe UI', 'MS Sans Serif', sans-serif;
+    overflow: hidden;
+    cursor: default;
+}
+
+/* --- UTILITY CLASSES --- */
+.bevel-outset {
+    background: var(--win-gray);
+    border-top: 2px solid var(--win-light);
+    border-left: 2px solid var(--win-light);
+    border-right: 2px solid #000;
+    border-bottom: 2px solid #000;
+    box-shadow: 1px 1px 0 #000;
+}
+
+.bevel-inset {
+    background: #fff;
+    border-top: 2px solid var(--win-dark-gray);
+    border-left: 2px solid var(--win-dark-gray);
+    border-right: 2px solid var(--win-light);
+    border-bottom: 2px solid var(--win-light);
+    box-shadow: inset 1px 1px 0 #000;
+}
+
+.win95-btn {
+    background: var(--win-gray);
+    border: 2px outset #fff;
+    border-right-color: #000; border-bottom-color: #000;
+    padding: 4px 12px;
+    font-size: 12px; color: #000;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+}
+.win95-btn:active { border-style: inset; transform: translate(1px, 1px); }
+
+/* --- SCREENS --- */
+#boot-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #000; color: #ccc;
+    font-family: 'VT323', monospace; font-size: 1.2rem;
+    padding: 2rem; z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.bios-layout {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.bios-text p { margin: 0; line-height: 1.4; }
+.white { color: #fff; }
+.blink { animation: blinker 1s linear infinite; }
+@keyframes blinker { 50% { opacity: 0; } }
+.hidden-delay-1, .hidden-delay-2, .hidden-delay-3 { opacity: 0; transition: opacity 0.1s; }
+
+.epa-logo {
+    width: 150px;
+    height: auto;
+    filter: invert(1); /* Make it white on black */
+    margin-right: 2rem;
+}
+
+.bios-footer {
+    margin-top: auto;
+}
+
+#splash-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #008080; /* Teal background fallback */
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.splash-content {
+    background: #c0c0c0;
+    padding: 20px;
+    border: 2px outset #fff;
+    width: 400px;
+    text-align: center;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+}
+.win-logo-text {
+    font-family: 'Arial Black', sans-serif;
+    color: #000;
+}
+.win-logo-text h1 {
+    font-size: 40px;
+    margin: 0;
+}
+.win-logo-text span {
+    font-weight: normal;
+    font-size: 16px;
+}
+.loading-bar-wrapper {
+    margin-top: 20px;
+    height: 20px;
+    background: #fff;
+    border: 1px inset #808080;
+    position: relative;
+    overflow: hidden;
+}
+.loading-bar {
+    width: 20%;
+    height: 100%;
+    background: #000080;
+    position: absolute;
+    left: 0;
+    animation: loadBar 2s linear infinite;
+}
+@keyframes loadBar {
+    0% { left: -20%; }
+    100% { left: 100%; }
+}
+
+/* WALLPAPER TEXT */
+#wallpaper-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Arial', sans-serif;
+    font-size: 48px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.1);
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+#shutdown-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #000; z-index: 99999;
+    display: none; align-items: center; justify-content: center;
+}
+.shutdown-msg { color: #e79e27; font-family: 'Segoe UI', sans-serif; font-size: 24px; font-weight: bold; }
+
+/* --- ICONS --- */
+#desktop { position: relative; width: 100%; height: calc(100% - 28px); z-index: 1; }
+.desktop-icon {
+    position: absolute; width: 75px; 
+    text-align: center; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 5px; border: 1px solid transparent;
+}
+.desktop-icon.selected { border: 1px dotted #fff; }
+.desktop-icon.selected .icon-img { filter: brightness(0.5) sepia(1) hue-rotate(180deg) saturate(5); }
+.desktop-icon.selected .icon-label { background: var(--win-blue-select); }
+.icon-img {
+    width: 32px; height: 32px; margin-bottom: 5px;
+    background-repeat: no-repeat; background-position: center; background-size: contain;
+    background-image: url('https://win98icons.alexmeub.com/icons/png/application_hourglass_small-4.png');
+}
+.icon-label { color: white; font-size: 12px; text-shadow: 1px 1px 0 #000; padding: 2px 4px; }
+
+/* Mappings */
+.ico-computer { background-image: url('https://win98icons.alexmeub.com/icons/png/computer_explorer-4.png'); }
+.ico-folder { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_closed-4.png'); }
+.ico-folder-prog { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_program_group_small-4.png'); }
+.ico-projects { background-image: url('https://win98icons.alexmeub.com/icons/png/briefcase-4.png'); } 
+.ico-paint { background-image: url('https://win98icons.alexmeub.com/icons/png/paint_file-4.png'); }
+.ico-recycle { background-image: url('https://win98icons.alexmeub.com/icons/png/recycle_bin_empty-4.png'); }
+.ico-recycle-full { background-image: url('https://win98icons.alexmeub.com/icons/png/recycle_bin_full-4.png'); }
+.ico-text { background-image: url('https://win98icons.alexmeub.com/icons/png/notepad_file-2.png'); }
+.ico-notepad { background-image: url('https://win98icons.alexmeub.com/icons/png/notepad-0.png'); }
+.ico-mail { background-image: url('https://win98icons.alexmeub.com/icons/png/outlook_express-4.png'); }
+.ico-internet { background-image: url('https://win98icons.alexmeub.com/icons/png/msie1-4.png'); }
+.ico-prog { background-image: url('https://win98icons.alexmeub.com/icons/png/application_hourglass_small-4.png'); }
+.ico-html { background-image: url('https://win98icons.alexmeub.com/icons/png/html_file-0.png'); }
+.ico-settings { background-image: url('https://win98icons.alexmeub.com/icons/png/settings_gear-4.png'); }
+.ico-calc { background-image: url('https://win98icons.alexmeub.com/icons/png/calculator-4.png'); }
+.ico-msdos { background-image: url('https://win98icons.alexmeub.com/icons/png/console_prompt-4.png'); }
+.ico-help { background-image: url('https://win98icons.alexmeub.com/icons/png/help_book_big-4.png'); }
+.ico-run { background-image: url('https://win98icons.alexmeub.com/icons/png/application_hourglass_small-4.png'); }
+.ico-shutdown { background-image: url('https://win98icons.alexmeub.com/icons/png/shut_down_cool-4.png'); }
+.ico-programs { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_program_group_small-4.png'); }
+.ico-accessories { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_program_group_small-4.png'); }
+.ico-documents { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs-4.png'); }
+.ico-control { background-image: url('https://win98icons.alexmeub.com/icons/png/settings_gear-4.png'); }
+.ico-doom { background-image: url('https://js-dos.com/cdn/DOOM.png'); background-size: cover; }
+
+/* --- WINDOW SYSTEM --- */
+.window {
+    position: absolute;
+    width: 450px; 
+    display: flex; flex-direction: column;
+    padding: 3px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    min-width: 200px; min-height: 150px;
+    max-height: calc(100vh - 35px);
+}
+.title-bar {
+    background: linear-gradient(90deg, var(--win-blue-title), #1084d0);
+    color: white; padding: 2px 4px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-weight: bold; font-size: 13px;
+    cursor: default; height: 22px; flex-shrink: 0;
+}
+.window.inactive .title-bar { background: #808080; color: #c0c0c0; }
+.title-bar-controls { display: flex; gap: 2px; }
+.title-btn {
+    width: 16px; height: 14px;
+    background: var(--win-gray);
+    border: 1px outset #fff;
+    font-size: 10px; line-height: 10px; text-align: center;
+    font-weight: bold; color: #000; cursor: pointer;
+}
+.title-btn:active { border-style: inset; }
+.menu-bar {
+    display: flex; gap: 10px; padding: 2px 6px;
+    font-size: 13px; margin-bottom: 2px; flex-shrink: 0;
+}
+.menu-bar span { cursor: pointer; padding: 0 4px; }
+.menu-bar span:hover { background: var(--win-blue-select); color: #fff; }
+.window-body {
+    flex-grow: 1; margin-top: 2px;
+    font-size: 13px; color: #000; background: var(--win-gray);
+    overflow: hidden; display: flex; flex-direction: column; position: relative;
+}
+.window-content-inner {
+    flex-grow: 1; overflow: auto; display: flex; flex-direction: column; background: #fff;
+    height: 100%; min-height: 0;
+}
+.resize-handle {
+    width: 15px; height: 15px;
+    position: absolute; bottom: 0; right: 0;
+    cursor: se-resize;
+    background: linear-gradient(135deg, transparent 50%, #808080 50%, #808080 60%, transparent 60%, transparent 70%, #808080 70%);
+    z-index: 10;
+}
+
+/* --- TASKBAR --- */
+#taskbar {
+    position: fixed; bottom: 0; left: 0; width: 100%; height: 28px;
+    background: var(--win-gray); border-top: 2px solid #fff;
+    display: flex; align-items: center; padding: 2px;
+    z-index: 19999;
+}
+#start-btn {
+    display: flex; align-items: center; gap: 4px;
+    font-weight: bold; font-size: 13px; height: 22px; padding: 0 6px;
+    background: var(--win-gray); border: 2px outset #fff;
+    border-right-color: #000; border-bottom-color: #000;
+    box-shadow: 1px 1px 0 #000; cursor: pointer; margin-right: 4px;
+}
+#start-btn.active { border-style: inset; background: #d4d4d4; }
+.start-icon {
+    width: 16px; height: 16px; 
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Windows_Logo_%281992-2001%29.svg/1280px-Windows_Logo_%281992-2001%29.svg.png');
+    background-size: cover; 
+}
+#task-list { flex-grow: 1; display: flex; gap: 3px; overflow: hidden; padding-left: 2px; }
+.task-item {
+    width: 160px; height: 22px; max-width: 160px;
+    background: var(--win-gray);
+    border: 2px outset #fff; border-right-color: #000; border-bottom-color: #000;
+    font-size: 12px; display: flex; align-items: center; padding: 0 5px;
+    cursor: pointer; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
+}
+.task-item.active {
+    border-style: inset; background: repeating-linear-gradient(45deg, #e6e6e6, #e6e6e6 1px, #fff 1px, #fff 2px); font-weight: bold;
+}
+.tray-area {
+    width: 90px; height: 22px; margin-left: 2px;
+    display: flex; align-items: center; justify-content: flex-end; padding-right: 5px; gap: 5px;
+    font-size: 12px;
+}
+.tray-icon.volume {
+    width: 16px; height: 16px; background-image: url('https://win98icons.alexmeub.com/icons/png/loudspeaker_rays-4.png'); background-size: cover;
+}
+
+/* --- START MENU (IMPROVED) --- */
+#start-menu {
+    position: fixed; bottom: 28px; left: 2px;
+    width: 250px; /* Wider for better look */
+    display: none; flex-direction: row;
+    z-index: 20000; padding: 2px;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.5); /* Drop shadow */
+}
+.start-sidebar {
+    width: 32px; /* Slightly wider */
+    background: linear-gradient(to bottom, #000080, #1084d0); /* Authentic gradient */
+    position: relative; 
+    color: white;
+}
+.sideways-text {
+    position: absolute; bottom: 5px; left: 4px;
+    transform: rotate(-90deg); transform-origin: bottom left;
+    font-size: 20px; font-weight: bold; white-space: nowrap; font-family: 'Segoe UI', Arial, sans-serif;
+    letter-spacing: 2px;
+}
+.start-items { flex-grow: 1; list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
+.start-item {
+    padding: 8px 12px; /* More breathing room */
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: #000; cursor: pointer; position: relative;
+}
+.start-item:hover { 
+    background: #000080; color: #fff; 
+}
+.submenu {
+    display: none; position: absolute; left: 100%; bottom: 0;
+    width: 200px; padding: 2px; z-index: 20001; margin-left: -2px;
+    box-shadow: 4px 4px 5px rgba(0,0,0,0.3);
+}
+.start-item:hover > .submenu { display: block; }
+.divider { 
+    height: 2px; 
+    background: #808080; 
+    border-bottom: 1px solid #fff; 
+    margin: 4px 2px; 
+}
+.icon-sm { width: 24px; height: 24px; background-size: contain; display: inline-block; flex-shrink: 0; margin-right: 10px;}
+.item-content { display: flex; align-items: center; }
+
+/* --- CONTEXT MENU --- */
+#context-menu { position: absolute; display: none; width: 150px; z-index: 30000; padding: 2px; }
+.ctx-item { padding: 4px 10px; font-size: 12px; cursor: pointer; }
+.ctx-item:hover { background: var(--win-blue-title); color: #fff; }
+.ctx-divider { height: 1px; background: #808080; margin: 2px 0; }
+
+/* --- APP SPECIFIC --- */
+.notepad-area { width: 100%; height: 100%; border: none; resize: none; outline: none; padding: 5px; font-family: 'Courier New', monospace; font-size: 14px; }
+
+/* PAINT FIXED */
+.paint-root { 
+    display: flex; flex-direction: column; height: 100%; background: #c0c0c0; 
+    /* Ensure child elements take available space */
+    min-height: 300px;
+}
+.paint-toolbar { 
+    padding: 4px; display: flex; gap: 4px; background: #c0c0c0; flex-wrap: wrap; 
+    border-bottom: 1px solid #808080; flex-shrink: 0; 
+}
+.paint-workspace { 
+    flex-grow: 1; padding: 10px; background: #808080; overflow: auto; 
+    display: flex; align-items: flex-start; justify-content: flex-start; 
+}
+canvas { background: #fff; cursor: crosshair; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+.paint-palette { 
+    display: flex; gap: 2px; padding: 4px; background: #c0c0c0; 
+    border-top: 1px solid #fff; flex-shrink: 0; 
+    /* Ensure it doesn't get hidden */
+    z-index: 5;
+}
+.current-color-box { width: 30px; height: 30px; padding: 2px; flex-shrink: 0; }
+.current-color-display { width: 100%; height: 100%; background: #000; }
+.color-grid { 
+    display: grid; grid-template-columns: repeat(16, 1fr); width: 260px; height: 32px; gap: 1px; 
+    flex-shrink: 0;
+}
+.color-swatch { width: 100%; height: 100%; border: 1px solid #808080; cursor: pointer; }
+.tool-btn { 
+    width: 24px; height: 24px; border: 1px solid #fff; border-right-color: #808080; border-bottom-color: #808080; 
+    background: var(--win-gray); cursor: pointer; padding: 0; display: flex; justify-content: center; align-items: center; 
+}
+.tool-btn.active { border: 1px solid #808080; border-right-color: #fff; border-bottom-color: #fff; background: #e0e0e0; box-shadow: inset 1px 1px 2px #000; }
+.tool-icon { width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+
+/* UPDATED TOOL ICONS */
+.tool-pencil { background-image: url('https://win98icons.alexmeub.com/icons/png/pencil-4.png'); }
+.tool-brush { background-image: url('https://win98icons.alexmeub.com/icons/png/paint_brush-4.png'); }
+.tool-eraser { background-image: url('https://win98icons.alexmeub.com/icons/png/eraser-4.png'); }
+.tool-bucket { background-image: url('https://win98icons.alexmeub.com/icons/png/paint_bucket-4.png'); }
+.tool-clear { background: #fff; border: 1px solid #000; width: 12px; height: 12px; }
+.tool-line { width: 12px; height: 2px; background: #000; transform: rotate(-45deg); }
+.tool-rect { width: 14px; height: 10px; border: 1px solid #000; }
+.tool-circle { width: 12px; height: 12px; border: 1px solid #000; border-radius: 50%; }
+
+.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 10px; background: #c0c0c0; }
+.calc-display { grid-column: span 4; margin-bottom: 5px; text-align: right; padding: 4px; font-family: 'Courier New'; font-weight: bold;}
+
+.resume-content { padding: 20px 30px; background: #fff; line-height: 1.6; font-family: 'Times New Roman', serif; overflow-y: auto; height: 100%; width: 100%; user-select: text; cursor: text; box-sizing: border-box; }
+.resume-header { border-bottom: 2px solid #000; margin-bottom: 15px; padding-bottom: 10px; }
+.resume-section { margin-bottom: 15px; }
+.resume-section h4 { background: #eee; padding: 2px; margin: 5px 0; font-weight: bold; }
+.center-flex { display: flex; justify-content: center; align-items: center; flex-direction: column; }
+
+.ie-toolbar { padding: 4px; display: flex; flex-direction: column; gap: 4px; background: #c0c0c0; border-bottom: 1px solid #808080;}
+.address-bar { display: flex; gap: 5px; align-items: center; font-size: 12px; }
+.url-input { flex-grow: 1; padding: 2px; font-size: 12px; }
+
+.dos-bg { background: #000; color: #c0c0c0; font-family: 'VT323', monospace; font-size: 16px; padding: 5px; height: 100%; overflow-y: auto;}
+.dos-input { background: transparent; border: none; color: #c0c0c0; font-family: inherit; font-size: inherit; outline: none; width: 80%; }
+
+.file-explorer-bar { padding: 5px; margin-bottom: 2px; background: #fff; font-size: 12px; border: 1px solid #808080;}
+.project-grid { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; background: #fff; border: 1px solid #000; box-shadow: inset 1px 1px 2px #888; flex-grow: 1; overflow: auto; align-content: flex-start; }
+.project-file { width: 80px; text-align: center; cursor: pointer; padding: 5px; display: flex; flex-direction: column; align-items: center; border: 1px solid transparent; }
+.project-file:hover { background: var(--win-blue-select); color: #fff; border: 1px dotted #fff; }
+.project-file:hover .project-name { color: #fff; }
+
+.tree-view ul { list-style-type: none; padding-left: 20px; margin: 0; }
+.tree-view li { margin: 5px 0; }
+.tree-icon { display: inline-block; width: 16px; height: 16px; margin-right: 5px; vertical-align: bottom; }
+.tree-icon.disk { background-image: url('https://win98icons.alexmeub.com/icons/png/chm-4.png'); background-size: cover; }
+.content-padding { padding: 15px; }
+.form-group { margin-bottom: 8px; display: flex; align-items: center; }
+.form-group label { width: 60px; font-size: 12px;}
+.form-group input, .form-group textarea { flex-grow: 1; font-family: 'Segoe UI', sans-serif; font-size: 12px; padding: 2px; border: 2px inset #fff; }

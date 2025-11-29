@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vala Nu Portfolio - Computer Engineer</title>
+    <link rel="icon" type="image/x-icon" href="./assets/favicon/win95.webp">
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Segoe+UI&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- 1. BIOS BOOT SCREEN -->
+    <div id="boot-screen">
+        <div class="bios-layout">
+            <div class="bios-text">
+                <p>AWARD MODULAR BIOS v4.51PG, An Energy Star Ally</p>
+                <p>Copyright (C) 1984-95, Award Software, Inc.</p>
+                <br>
+                <p>PENTIUM-S CPU at 133MHz</p>
+                <p>Memory Test: <span id="mem-test">0</span>K OK</p>
+                <br>
+                <p class="hidden-delay-1">Award Plug and Play BIOS Extension v1.0A</p>
+                <p class="hidden-delay-1">Detecting HDD Primary Master ... <span class="white">QUANTUM FIREBALL 1.2GB</span></p>
+                <p class="hidden-delay-1">Detecting HDD Primary Slave  ... <span class="white">None</span></p>
+                <br>
+                <p class="hidden-delay-2">Starting ValaNuOS 95...</p>
+                <p class="blink hidden-delay-3">_</p>
+            </div>
+            <div class="energy-star-wrapper">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Energy_Star_logo.svg/375px-Energy_Star_logo.svg.png" class="epa-logo" alt="Energy Star">
+            </div>
+        </div>
+        <div class="bios-footer">
+            <p>Press <b>DEL</b> to enter SETUP</p>
+            <p>08/18/1995-i440BX-2A69KD4FC-00</p>
+        </div>
+    </div>
+
+    <!-- 2. WINDOWS SPLASH SCREEN -->
+    <div id="splash-screen" style="display:none;">
+        <div class="splash-content">
+            <div class="splash-logo-container">
+                <div class="win-logo-text">
+                    <span>Microsoft</span>
+                    <h1>ValaNu<span>OS</span></h1>
+                </div>
+            </div>
+            <div class="loading-bar-wrapper">
+                <div class="loading-bar"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SHUTDOWN SCREEN -->
+    <div id="shutdown-screen">
+        <div class="shutdown-msg">It is now safe to turn off your computer.</div>
+    </div>
+
+    <!-- WALLPAPER TEXT -->
+    <div id="wallpaper-text">This is Aryan Vala</div>
+
+    <!-- DESKTOP -->
+    <div id="desktop">
+        <div class="desktop-icon" id="icon-computer" ondblclick="openWindow('computer')">
+            <div class="icon-img ico-computer"></div><div class="icon-label">My Computer</div>
+        </div>
+        <div class="desktop-icon" id="icon-projects" ondblclick="openWindow('projects')">
+            <div class="icon-img ico-projects"></div><div class="icon-label">My Projects</div>
+        </div>
+        <div class="desktop-icon" id="icon-skills" ondblclick="openWindow('skills')">
+            <div class="icon-img ico-folder"></div><div class="icon-label">Skills</div>
+        </div>
+        <div class="desktop-icon" id="icon-doom" ondblclick="openWindow('doom')">
+            <div class="icon-img ico-doom"></div><div class="icon-label">DOOM</div>
+        </div>
+        <div class="desktop-icon" id="icon-paint" ondblclick="openWindow('paint')">
+            <div class="icon-img ico-paint"></div><div class="icon-label">Vala Nu Paint</div>
+        </div>
+        <div class="desktop-icon" id="icon-resume" ondblclick="openWindow('resume')">
+            <div class="icon-img ico-text"></div><div class="icon-label">Resume.doc</div>
+        </div>
+        <div class="desktop-icon" id="icon-contact" ondblclick="openWindow('contact')">
+            <div class="icon-img ico-mail"></div><div class="icon-label">Email Me</div>
+        </div>
+        <div class="desktop-icon" id="icon-internet" ondblclick="openWindow('internet')">
+            <div class="icon-img ico-internet"></div><div class="icon-label">Internet</div>
+        </div>
+        <div class="desktop-icon" id="icon-recycle" ondblclick="openWindow('recycle')">
+            <div class="icon-img ico-recycle" id="recycle-img"></div><div class="icon-label">Recycle Bin</div>
+        </div>
+    </div>
+
+    <!-- HIDDEN WINDOW TEMPLATES -->
+    <div id="templates" style="display: none;">
+        
+        <!-- My Computer -->
+        <div id="tpl-computer" class="window-content-inner">
+            <div class="menu-bar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+            <div class="file-explorer-bar bevel-inset">
+                <span class="comp-address">Address: My Computer</span>
+            </div>
+            <div class="project-grid comp-content"></div>
+        </div>
+
+        <!-- Projects -->
+        <div id="tpl-projects" class="window-content-inner">
+            <div class="menu-bar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span></div>
+            <div class="file-explorer-bar bevel-inset"><span>Address: C:\Users\Vala\Projects</span></div>
+            <div class="project-grid">
+                <div class="project-file" onclick="alert('Running Showcase.exe...')"><div class="icon-img ico-prog"></div><div class="project-name">Showcase.exe</div></div>
+                <div class="project-file" onclick="alert('Loading legacy site...')"><div class="icon-img ico-html"></div><div class="project-name">Old_Port.html</div></div>
+                <div class="project-file"><div class="icon-img ico-prog"></div><div class="project-name">Emulator_VX</div></div>
+                <div class="project-file"><div class="icon-img ico-text"></div><div class="project-name">Readme.txt</div></div>
+            </div>
+        </div>
+
+        <!-- DOOM Game -->
+        <div id="tpl-doom" class="window-content-inner no-scroll" style="background:#000;">
+            <div class="menu-bar"><span><u>G</u>ame</span><span><u>H</u>elp</span></div>
+            <div class="dosbox-wrapper" style="width:100%; height:100%; overflow:hidden;">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+
+        <!-- Skills (UPDATED) -->
+        <div id="tpl-skills" class="window-content-inner">
+            <div class="menu-bar"><span><u>F</u>ile</span><span><u>H</u>elp</span></div>
+            <div class="content-padding">
+                <div class="tree-view">
+                    <ul>
+                        <li><span class="tree-icon disk"></span> <strong>Development</strong>
+                            <ul>
+                                <li>Flutter App Development</li>
+                                <li>.NET Web Development</li>
+                            </ul>
+                        </li>
+                        <li><span class="tree-icon disk"></span> <strong>Database & Backend</strong>
+                            <ul>
+                                <li>SQL</li>
+                                <li>Firebase</li>
+                                <li>MongoDB</li>
+                            </ul>
+                        </li>
+                        <li><span class="tree-icon disk"></span> <strong>Systems & Network</strong>
+                            <ul>
+                                <li>OS (x64, Unix-based)</li>
+                                <li>Networking</li>
+                            </ul>
+                        </li>
+                        <li><span class="tree-icon disk"></span> <strong>Architecture</strong>
+                            <ul>
+                                <li>REST API Integration</li>
+                                <li>MVVM / MVC Architecture</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact/Email -->
+        <div id="tpl-contact" class="window-content-inner">
+            <div class="menu-bar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>M</u>ail</span></div>
+            <div class="content-padding">
+                <form onsubmit="event.preventDefault(); sendEmail();">
+                    <div class="form-group"><label>To:</label><input type="text" value="aryanvala88@gmail.com" readonly class="bevel-inset"></div>
+                    <div class="form-group"><label>Subject:</label><input type="text" id="email-subject" class="bevel-inset"></div>
+                    <div class="form-group"><textarea id="email-body" class="bevel-inset" rows="8"></textarea></div>
+                    <div class="btn-group" style="margin-top:5px"><button class="win95-btn">Send</button></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Paint -->
+        <div id="tpl-paint" class="window-content-inner paint-app-root">
+            <div class="menu-bar">
+                <span onclick="savePaint(this)"><u>S</u>ave</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>I</u>mage</span><span><u>H</u>elp</span>
+            </div>
+            <div class="paint-main-area">
+                <div class="paint-toolbar bevel-outset">
+                    <button class="tool-btn active" onclick="setPaintTool(this, 'pencil')" title="Pencil"><div class="tool-icon tool-pencil"></div></button>
+                    <button class="tool-btn" onclick="setPaintTool(this, 'brush')" title="Brush"><div class="tool-icon tool-brush"></div></button>
+                    <button class="tool-btn" onclick="setPaintTool(this, 'eraser')" title="Eraser"><div class="tool-icon tool-eraser"></div></button>
+                    <button class="tool-btn" onclick="setPaintTool(this, 'bucket')" title="Fill Bucket"><div class="tool-icon tool-bucket"></div></button>
+                    <button class="tool-btn" onclick="setPaintTool(this, 'line')" title="Line"><div class="tool-icon tool-line"></div></button>
+                    <button class="tool-btn" onclick="setPaintTool(this, 'rect')" title="Rectangle"><div class="tool-icon tool-rect"></div></button>
+                    <button class="tool-btn" onclick="setPaintTool(this, 'circle')" title="Circle"><div class="tool-icon tool-circle"></div></button>
+                    <button class="tool-btn" onclick="clearCanvas(this)" title="Clear All"><div class="tool-icon tool-clear"></div></button>
+                </div>
+                <div class="paint-workspace bevel-inset">
+                    <canvas class="paintCanvas" width="800" height="600"></canvas>
+                </div>
+            </div>
+            <div class="paint-palette bevel-inset">
+                <div class="current-color-box bevel-inset"><div class="current-color-display"></div></div>
+                <div class="color-grid">
+                    <div class="color-swatch" style="background:#000" onclick="setColor(this, '#000000')"></div>
+                    <div class="color-swatch" style="background:#808080" onclick="setColor(this, '#808080')"></div>
+                    <div class="color-swatch" style="background:#800000" onclick="setColor(this, '#800000')"></div>
+                    <div class="color-swatch" style="background:#808000" onclick="setColor(this, '#808000')"></div>
+                    <div class="color-swatch" style="background:#008000" onclick="setColor(this, '#008000')"></div>
+                    <div class="color-swatch" style="background:#008080" onclick="setColor(this, '#008080')"></div>
+                    <div class="color-swatch" style="background:#000080" onclick="setColor(this, '#000080')"></div>
+                    <div class="color-swatch" style="background:#800080" onclick="setColor(this, '#800080')"></div>
+                    <div class="color-swatch" style="background:#fff" onclick="setColor(this, '#ffffff')"></div>
+                    <div class="color-swatch" style="background:#c0c0c0" onclick="setColor(this, '#c0c0c0')"></div>
+                    <div class="color-swatch" style="background:#f00" onclick="setColor(this, '#ff0000')"></div>
+                    <div class="color-swatch" style="background:#ff0" onclick="setColor(this, '#ffff00')"></div>
+                    <div class="color-swatch" style="background:#0f0" onclick="setColor(this, '#00ff00')"></div>
+                    <div class="color-swatch" style="background:#0ff" onclick="setColor(this, '#00ffff')"></div>
+                    <div class="color-swatch" style="background:#00f" onclick="setColor(this, '#0000ff')"></div>
+                    <div class="color-swatch" style="background:#f0f" onclick="setColor(this, '#ff00ff')"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recycle Bin -->
+        <div id="tpl-recycle" class="window-content-inner">
+            <div class="menu-bar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>H</u>elp</span></div>
+            <div class="file-explorer-bar bevel-inset"><span>Address: Recycle Bin</span></div>
+            <div class="project-grid recycle-grid"></div>
+            <div class="status-bar bevel-inset" style="padding:5px; text-align:right;">
+                <button class="win95-btn" onclick="restoreAllIcons()">Restore All</button>
+                <button class="win95-btn" onclick="emptyRecycle()">Empty Bin</button>
+            </div>
+        </div>
+
+        <!-- Notepad -->
+        <div id="tpl-notepad" class="window-content-inner">
+            <div class="menu-bar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>H</u>elp</span></div>
+            <textarea class="notepad-area" spellcheck="false"></textarea>
+        </div>
+
+        <!-- Calculator -->
+        <div id="tpl-calc" class="window-content-inner no-scroll">
+            <div class="menu-bar"><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+            <div class="calc-wrapper">
+                <input type="text" class="calc-display" readonly value="0" class="bevel-inset">
+                <div class="calc-grid">
+                    <button class="win95-btn red" onclick="calcClear(this)">C</button>
+                    <button class="win95-btn" onclick="calcOp(this, '/')">/</button>
+                    <button class="win95-btn" onclick="calcOp(this, '*')">*</button>
+                    <button class="win95-btn" onclick="calcOp(this, '-')">-</button>
+                    <button class="win95-btn" onclick="calcNum(this, 7)">7</button>
+                    <button class="win95-btn" onclick="calcNum(this, 8)">8</button>
+                    <button class="win95-btn" onclick="calcNum(this, 9)">9</button>
+                    <button class="win95-btn" onclick="calcOp(this, '+')">+</button>
+                    <button class="win95-btn" onclick="calcNum(this, 4)">4</button>
+                    <button class="win95-btn" onclick="calcNum(this, 5)">5</button>
+                    <button class="win95-btn" onclick="calcNum(this, 6)">6</button>
+                    <button class="win95-btn" onclick="calcEq(this)">=</button>
+                    <button class="win95-btn" onclick="calcNum(this, 1)">1</button>
+                    <button class="win95-btn" onclick="calcNum(this, 2)">2</button>
+                    <button class="win95-btn" onclick="calcNum(this, 3)">3</button>
+                    <button class="win95-btn big-0" onclick="calcNum(this, 0)">0</button>
+                    <button class="win95-btn" onclick="calcNum(this, '.')">.</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MS-DOS -->
+        <div id="tpl-msdos" class="window-content-inner msdos-bg">
+            <div class="msdos-content">
+                <p>Microsoft(R) Windows 95</p>
+                <p>   (C)Copyright Microsoft Corp 1981-1995.</p>
+                <div class="dos-history"></div>
+                <div class="dos-input-line">
+                    <span class="dos-prompt">C:\WINDOWS></span><input type="text" class="dos-input" autocomplete="off" autofocus>
+                </div>
+            </div>
+        </div>
+
+        <!-- Internet -->
+        <div id="tpl-internet" class="window-content-inner">
+            <div class="menu-bar"><span><u>F</u>ile</span><span><u>H</u>elp</span></div>
+            <div class="ie-toolbar bevel-outset">
+                <div class="address-bar">
+                    <span>Address:</span>
+                    <input type="text" value="google.com" class="bevel-inset url-input">
+                    <button class="win95-btn go-btn">Go</button>
+                </div>
+            </div>
+            <div class="ie-viewport bevel-inset" style="background:white; flex-grow:1; overflow:hidden; position:relative;">
+                <iframe src="about:blank" style="width:100%;height:100%;border:none;"></iframe>
+            </div>
+        </div>
+
+        <!-- Resume (Updated name to Aryan Vala as requested) -->
+        <div id="tpl-resume" class="window-content-inner">
+            <div class="resume-content">
+                <div class="resume-header">
+                    <h1 style="margin:0;">Aryan S. Vala</h1>
+                    <p>Full-Stack Developer | Backend Lead</p>
+                    <p style="font-size: 13px; margin-top:5px;">+91 6355751960 | aryanvala88@gmail.com</p>
+                </div>
+                
+                <div class="resume-section">
+                    <h4>Summary</h4>
+                    <p>Final-year Computer Engineering diploma student specializing in cross-platform mobile development (Flutter) and robust backend systems (SQL, .NET, Firebase). Adept at multitasking and managing deadlines in fast-paced project environments.</p>
+                </div>
+
+                <div class="resume-section">
+                    <h4>Experience</h4>
+                    <p><strong>Flutter Developer for a School</strong> (2019 - Present)</p>
+                    <ul style="padding-left: 20px; font-size: 13px;">
+                        <li>Architected a comprehensive school management solution using Flutter & Firebase.</li>
+                        <li>Engineered a secure Student Datastore using Cloud Firestore.</li>
+                        <li>Implemented Fees Management module to automate payment tracking & receipts.</li>
+                        <li>Designed NoSQL data models & Firebase Security Rules.</li>
+                    </ul>
+                    <p style="margin-top:10px;"><strong>Server & Network Manager</strong> (2019 - Present)</p>
+                    <ul style="padding-left: 20px; font-size: 13px;">
+                        <li>Administered IT infrastructure (Windows/Linux servers, NAS).</li>
+                        <li>Managed LAN/WLAN, routers, switches & access points.</li>
+                        <li>Implemented network security & data backup protocols.</li>
+                    </ul>
+                </div>
+
+                <div class="resume-section">
+                    <h4>Projects</h4>
+                    <ul style="padding-left: 20px; font-size: 13px;">
+                        <li><strong>Fine-Tuned LLM (3.4B):</strong> Llama-based model.</li>
+                        <li><strong>LLM Wrapper:</strong> DotNet, MySQL.</li>
+                        <li><strong>School/Gym Management:</strong> Flutter, Firebase.</li>
+                        <li><strong>Recipe App:</strong> Flutter, Firebase.</li>
+                        <li><strong>Live Texting WebApp:</strong> NodeJS, ExpressJS.</li>
+                    </ul>
+                </div>
+
+                <div class="resume-section">
+                    <h4>Education</h4>
+                    <p><strong>Diploma in Computer Engineering</strong> - Darshan University (Will Complete: 2026)</p>
+                </div>
+
+                <div class="center-flex" style="margin-top:20px;">
+                    <button class="win95-btn" onclick="alert('Printing Resume...')">Print Resume</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help -->
+        <div id="tpl-help" class="window-content-inner">
+            <div class="content-padding">
+                <h3>ValaNuOS Help</h3>
+                <ul>
+                    <li><strong>Icons:</strong> Drag to move. Double click to open.</li>
+                    <li><strong>Delete:</strong> Drag icons to Recycle Bin.</li>
+                    <li><strong>Start:</strong> Access apps like Paint and Notepad.</li>
+                    <li><strong>Mobile:</strong> Touch support enabled.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div id="tpl-control" class="window-content-inner">
+            <div class="project-grid">
+                <div class="project-file"><div class="icon-img ico-settings"></div><div class="project-name">Display</div></div>
+                <div class="project-file"><div class="icon-img ico-settings"></div><div class="project-name">Mouse</div></div>
+                <div class="project-file"><div class="icon-img ico-settings"></div><div class="project-name">System</div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TASKBAR -->
+    <div id="taskbar">
+        <button id="start-btn" onclick="toggleStartMenu(event)"><div class="start-icon"></div><b>Start</b></button>
+        <div class="taskbar-divider"></div>
+        <div id="task-list"></div>
+        <div class="tray-area bevel-inset"><div class="tray-icon volume"></div><div id="clock">12:00 PM</div></div>
+    </div>
+
+    <!-- START MENU -->
+    <div id="start-menu" class="bevel-outset">
+        <div class="start-sidebar"><span class="sideways-text"><strong>Vala</strong>NuOS</span></div>
+        <ul class="start-items">
+            <li class="start-item has-submenu">
+                <div class="item-content"><span class="icon-sm ico-programs"></span>Programs</div><span class="arrow">►</span>
+                <ul class="submenu bevel-outset">
+                    <li class="start-item has-submenu">
+                        <div class="item-content"><span class="icon-sm ico-accessories"></span>Accessories</div><span class="arrow">►</span>
+                        <ul class="submenu bevel-outset">
+                            <li class="start-item" onclick="openWindow('paint')"><span class="icon-sm ico-paint"></span>Vala Nu Paint</li>
+                            <li class="start-item" onclick="openWindow('notepad')"><span class="icon-sm ico-notepad"></span>Notepad</li>
+                            <li class="start-item" onclick="openWindow('calc')"><span class="icon-sm ico-calc"></span>Calculator</li>
+                        </ul>
+                    </li>
+                    <li class="start-item" onclick="openWindow('projects')"><span class="icon-sm ico-folder"></span>My Projects</li>
+                    <li class="start-item" onclick="openWindow('doom')"><span class="icon-sm ico-run"></span>DOOM</li>
+                    <li class="start-item" onclick="openWindow('msdos')"><span class="icon-sm ico-msdos"></span>MS-DOS Prompt</li>
+                    <li class="start-item" onclick="openWindow('internet')"><span class="icon-sm ico-internet"></span>Vala Nu Explorer</li>
+                </ul>
+            </li>
+            <li class="start-item has-submenu">
+                <div class="item-content"><span class="icon-sm ico-documents"></span>Documents</div><span class="arrow">►</span>
+                <ul class="submenu bevel-outset">
+                    <li class="start-item" onclick="openWindow('resume')"><span class="icon-sm ico-text"></span>Resume.doc</li>
+                </ul>
+            </li>
+            <li class="start-item has-submenu">
+                <div class="item-content"><span class="icon-sm ico-settings"></span>Settings</div><span class="arrow">►</span>
+                <ul class="submenu bevel-outset">
+                    <li class="start-item" onclick="openWindow('control')"><span class="icon-sm ico-control"></span>Control Panel</li>
+                </ul>
+            </li>
+            <li class="start-item" onclick="openWindow('help')"><span class="icon-sm ico-help"></span>Help</li>
+            <li class="start-item" onclick="openWindow('run')"><span class="icon-sm ico-run"></span>Run...</li>
+            <li class="divider"></li>
+            <li class="start-item" onclick="performShutdown()"><span class="icon-sm ico-shutdown"></span>Shut Down...</li>
+        </ul>
+    </div>
+
+    <!-- CONTEXT MENU -->
+    <div id="context-menu" class="bevel-outset">
+        <div class="ctx-item" onclick="ctxAction('restore')">Restore</div>
+        <div class="ctx-item" onclick="ctxAction('minimize')">Minimize</div>
+        <div class="ctx-divider"></div>
+        <div class="ctx-item" onclick="ctxAction('close')">Close</div>
+    </div>
+
+    <!-- AUDIO ASSETS -->
+    <!-- Using archive.org for reliable retro sound hosting -->
+    <audio id="snd-startup" src="./assets/audio/Windows-95-startup-sound.wav" preload="auto"></audio>
+    <audio id="snd-shutdown" src="./assets/audio/windows-95-shutdown-sound.mp3" preload="auto"></audio>
+    <audio id="snd-click" src="./assets/audio/WinClick.mp3" preload="auto"></audio>
+    <audio id="snd-chord" src="./assets/audio/windowsChords.mp3" preload="auto"></audio>
+    <audio id="snd-recycle" src="./assets/audio/windows-xp-recycle-bin.mp3" preload="auto"></audio>
+
+    <script src="./script/script.js"></script>
+</body>
+</html>
