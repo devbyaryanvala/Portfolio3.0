@@ -19,8 +19,10 @@ const sounds = {
 
 function playSound(name) {
     if(sounds[name]) {
-        sounds[name].currentTime = 0;
-        sounds[name].play().catch(e => console.log("Audio play blocked (interaction required)"));
+        // Clone node to allow overlapping sounds (rapid clicking)
+        const audio = sounds[name].cloneNode();
+        audio.volume = 0.5; // Adjust volume if needed
+        audio.play().catch(e => console.log("Audio play blocked (interaction required)"));
     }
 }
 
@@ -32,6 +34,13 @@ document.addEventListener('mousedown', (e) => {
         e.target.closest('.start-item') || 
         e.target.closest('.task-item') ||
         e.target.closest('.title-btn')) {
+        playSound('click');
+    }
+});
+
+// ADDED: Double click sound for opening icons
+document.addEventListener('dblclick', (e) => {
+    if (e.target.closest('.desktop-icon')) {
         playSound('click');
     }
 });
@@ -629,10 +638,23 @@ function initComputer(win) {
 
 /* --- APP: PROJECTS --- */
 function initProjects(win) {
-    // Find the showcase file inside this specific window's content
-    const showcaseFile = win.querySelector('.project-file[onclick*="Showcase.exe"]');
+    // Target elements by their data-link attribute
+    const showcaseFile = win.querySelector('.project-file[data-link="showcase"]');
+    const oldPortfolioFile = win.querySelector('.project-file[data-link="old-portfolio"]');
+    const githubFile = win.querySelector('.project-file[data-link="github"]');
+    const linkedinFile = win.querySelector('.project-file[data-link="linkedin"]');
+
     if (showcaseFile) {
         showcaseFile.onclick = () => window.open('https://projects.aryanvala.online', '_blank');
+    }
+    if (oldPortfolioFile) {
+        oldPortfolioFile.onclick = () => window.open('https://oldportfolio.aryanvala.online', '_blank');
+    }
+    if (githubFile) {
+        githubFile.onclick = () => window.open('https://github.com/devbyaryanvala', '_blank');
+    }
+    if (linkedinFile) {
+        linkedinFile.onclick = () => window.open('https://www.linkedin.com/in/aryan-vala-ba62a1212/', '_blank');
     }
 }
 
@@ -654,8 +676,8 @@ function initResume(win) {
 
 function downloadResume() {
     const link = document.createElement('a');
-    link.href = './assets/Aryan-Vala-CV.pdf'; // Assuming the file is in the same directory
-    link.download = './assets/Aryan-Vala-CV.pdf';
+    link.href = 'Aryan-Vala-CV.pdf'; // Assuming the file is in the same directory
+    link.download = 'Aryan-Vala-CV.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

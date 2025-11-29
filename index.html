@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vala Nu Portfolio - Computer Engineer</title>
-    <link rel="icon" type="image/x-icon" href="./assets/favicon/win95.webp">
+    <!-- Updated favicon path to match typical project structure or fallback -->
+    <link rel="icon" type="image/x-icon" href="https://win98icons.alexmeub.com/icons/png/computer_explorer-4.png">
     <link rel="stylesheet" href="./css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Segoe+UI&display=swap" rel="stylesheet">
 </head>
@@ -103,15 +104,15 @@
             <div class="project-grid comp-content"></div>
         </div>
 
-        <!-- Projects -->
+        <!-- Projects (FIXED LINKS) -->
         <div id="tpl-projects" class="window-content-inner">
             <div class="menu-bar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span></div>
             <div class="file-explorer-bar bevel-inset"><span>Address: C:\Users\Vala\Projects</span></div>
             <div class="project-grid">
-                <div class="project-file" onclick="alert('Running Showcase.exe...')"><div class="icon-img ico-prog"></div><div class="project-name">Showcase.exe</div></div>
-                <div class="project-file" onclick="alert('Loading legacy site...')"><div class="icon-img ico-html"></div><div class="project-name">Old_Port.html</div></div>
-                <div class="project-file"><div class="icon-img ico-prog"></div><div class="project-name">Emulator_VX</div></div>
-                <div class="project-file"><div class="icon-img ico-text"></div><div class="project-name">Readme.txt</div></div>
+                <div class="project-file" data-link="showcase"><div class="icon-img ico-prog"></div><div class="project-name">Showcase.exe</div></div>
+                <div class="project-file" data-link="old-portfolio"><div class="icon-img ico-html"></div><div class="project-name">Old_Port.html</div></div>
+                <div class="project-file" data-link="github"><div class="icon-img ico-github"></div><div class="project-name">GitHub.exe</div></div>
+                <div class="project-file" data-link="linkedin"><div class="icon-img ico-linkedin"></div><div class="project-name">linkedin.exe</div></div>
             </div>
         </div>
 
@@ -389,7 +390,7 @@
                     <li class="start-item" onclick="openWindow('projects')"><span class="icon-sm ico-folder"></span>My Projects</li>
                     <li class="start-item" onclick="openWindow('doom')"><span class="icon-sm ico-run"></span>DOOM</li>
                     <li class="start-item" onclick="openWindow('msdos')"><span class="icon-sm ico-msdos"></span>MS-DOS Prompt</li>
-                    <li class="start-item" onclick="openWindow('internet')"><span class="icon-sm ico-internet"></span>Vala Nu Explorer</li>
+                    <li class="start-item" onclick="openWindow('internet')"><span class="icon-sm ico-internet"></span>Aryan Explorer</li>
                 </ul>
             </li>
             <li class="start-item has-submenu">
@@ -420,7 +421,6 @@
     </div>
 
     <!-- AUDIO ASSETS -->
-    <!-- Using archive.org for reliable retro sound hosting -->
     <audio id="snd-startup" src="./assets/audio/Windows-95-startup-sound.wav" preload="auto"></audio>
     <audio id="snd-shutdown" src="./assets/audio/windows-95-shutdown-sound.mp3" preload="auto"></audio>
     <audio id="snd-click" src="./assets/audio/WinClick.mp3" preload="auto"></audio>
