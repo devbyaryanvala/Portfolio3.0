@@ -676,8 +676,8 @@ function initResume(win) {
 
 function downloadResume() {
     const link = document.createElement('a');
-    link.href = 'Aryan-Vala-CV.pdf'; // Assuming the file is in the same directory
-    link.download = 'Aryan-Vala-CV.pdf';
+    link.href = './assets/Aryan-Vala-CV.pdf'; // Assuming the file is in the same directory
+    link.download = './assets/Aryan-Vala-CV.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
