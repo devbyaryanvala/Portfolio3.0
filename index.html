@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vala Nu Portfolio - Computer Engineer</title>
-    <!-- Updated favicon path to match typical project structure or fallback -->
-    <link rel="icon" type="image/x-icon" href="https://win98icons.alexmeub.com/icons/png/computer_explorer-4.png">
+    <title>Aryan Vala | Retro Portfolio</title>
+    <meta name="description" content="Welcome to my interactive Windows 95 retro portfolio. Explore my projects, skills, and resume in a classic desktop environment.">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Aryan Vala | Retro Portfolio">
+    <meta property="og:description" content="Welcome to my interactive Windows 95 retro portfolio. Explore my projects, skills, and resume in a classic desktop environment.">
+    <meta property="og:type" content="website">
+    
+    <link rel="icon" type="image/x-icon" href="./assets/icons/computer_explorer-4.png">
     <link rel="stylesheet" href="./css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Segoe+UI&display=swap" rel="stylesheet">
 </head>
@@ -29,7 +35,7 @@
                 <p class="blink hidden-delay-3">_</p>
             </div>
             <div class="energy-star-wrapper">
-                <img src="https://www.energystar.gov/sites/default/files/styles/large/public/assets/images/ENE_logo_Cert_v_copyright_v2.jpg.webp" class="epa-logo" alt="Energy Star">
+                <img src="./assets/icons/epa-logo.webp" class="epa-logo" alt="Energy Star">
             </div>
         </div>
         <div class="bios-footer">
@@ -58,6 +64,19 @@
         <div class="shutdown-msg">It is now safe to turn off your computer.</div>
     </div>
 
+    <!-- BSOD SCREEN -->
+    <div id="bsod-screen" style="display:none;" tabindex="0">
+        <div class="bsod-content">
+            <span class="bsod-badge">Windows</span>
+            <p>A fatal exception 0E has occurred at 028:C0011E36 in VXD VMM(01) + 00010E36. The current application will be terminated.</p>
+            <br>
+            <p>*  Press any key to terminate the current application.</p>
+            <p>*  Press CTRL+ALT+DEL again to restart your computer. You will lose any unsaved information in all applications.</p>
+            <br>
+            <p class="text-center">Press any key to continue <span class="blink">_</span></p>
+        </div>
+    </div>
+
     <!-- WALLPAPER TEXT -->
     <div id="wallpaper-text">This is Aryan Vala</div>
 
@@ -80,6 +99,18 @@
         </div>
         <div class="desktop-icon" id="icon-resume" ondblclick="openWindow('resume')">
             <div class="icon-img ico-text"></div><div class="icon-label">Resume.doc</div>
+        </div>
+        <div class="desktop-icon" id="icon-calc" ondblclick="openWindow('calc')">
+            <div class="icon-img ico-calc"></div><div class="icon-label">Calculator</div>
+        </div>
+        <div class="desktop-icon" id="icon-minesweeper" ondblclick="openWindow('minesweeper')">
+            <div class="icon-img ico-minesweeper"></div><div class="icon-label">Minesweeper</div>
+        </div>
+        <div class="desktop-icon" id="icon-mediaplayer" ondblclick="openWindow('mediaplayer')">
+            <div class="icon-img ico-mediaplayer"></div><div class="icon-label">Media Player</div>
+        </div>
+        <div class="desktop-icon" id="icon-recycle" ondblclick="openWindow('recycle')">
+            <div class="icon-img ico-recycle" id="recycle-img"></div><div class="icon-label">Recycle Bin</div>
         </div>
         <div class="desktop-icon" id="icon-contact" ondblclick="openWindow('contact')">
             <div class="icon-img ico-mail"></div><div class="icon-label">Email Me</div>
@@ -109,10 +140,10 @@
             <div class="menu-bar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span></div>
             <div class="file-explorer-bar bevel-inset"><span>Address: C:\Users\Vala\Projects</span></div>
             <div class="project-grid">
-                <div class="project-file" data-link="showcase"><div class="icon-img ico-prog"></div><div class="project-name">Showcase.exe</div></div>
-                <div class="project-file" data-link="old-portfolio"><div class="icon-img ico-html"></div><div class="project-name">Old_Port.html</div></div>
-                <div class="project-file" data-link="github"><div class="icon-img ico-github"></div><div class="project-name">GitHub.exe</div></div>
-                <div class="project-file" data-link="linkedin"><div class="icon-img ico-linkedin"></div><div class="project-name">linkedin.exe</div></div>
+                <div class="project-file" onclick="showAboutDialog('Face Swap Beta', 'Built an AI-powered real-time face-swapping application achieving 15–20 FPS on live webcam streams using computer vision and deep learning.')"><div class="icon-img ico-prog"></div><div class="project-name">Face_Swap.exe</div></div>
+                <div class="project-file" onclick="showAboutDialog('2D Physics Engine', 'Built a high-performance C99 physics engine supporting 10,000+ rigid bodies at 30+ FPS using broad-phase collision detection and impulse-based resolution.')"><div class="icon-img ico-prog"></div><div class="project-name">Physics.exe</div></div>
+                <div class="project-file" onclick="showAboutDialog('8B Gen-AI Model', 'Developed an 8B-parameter transformer-based LLM with optimized inference supporting 8K-token context windows.')"><div class="icon-img ico-prog"></div><div class="project-name">GenAI.exe</div></div>
+                <div class="project-file" onclick="showAboutDialog('OdoShift & LaunchKit', 'Shipped OdoShift and LaunchKit from concept to paying customers as Founder of Voorin Technologies.')"><div class="icon-img ico-html"></div><div class="project-name">Voorin_SaaS.html</div></div>
             </div>
         </div>
 
@@ -196,11 +227,11 @@
         <div id="tpl-contact" class="window-content-inner">
             <div class="menu-bar"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>M</u>ail</span></div>
             <div class="content-padding">
-                <form onsubmit="event.preventDefault(); sendEmail();">
+                <form onsubmit="event.preventDefault(); sendEmail(this);">
                     <div class="form-group"><label>To:</label><input type="text" value="aryanvala88@gmail.com" readonly class="bevel-inset"></div>
-                    <div class="form-group"><label>Subject:</label><input type="text" id="email-subject" class="bevel-inset"></div>
-                    <div class="form-group"><textarea id="email-body" class="bevel-inset" rows="8"></textarea></div>
-                    <div class="btn-group" style="margin-top:5px"><button class="win95-btn">Send</button></div>
+                    <div class="form-group"><label>Subject:</label><input type="text" class="email-subject bevel-inset"></div>
+                    <div class="form-group"><textarea class="email-body bevel-inset" rows="8"></textarea></div>
+                    <div class="btn-group" style="margin-top:5px"><button class="win95-btn" type="submit">Send</button></div>
                 </form>
             </div>
         </div>
@@ -269,7 +300,7 @@
         <div id="tpl-calc" class="window-content-inner no-scroll">
             <div class="menu-bar"><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
             <div class="calc-wrapper">
-                <input type="text" class="calc-display" readonly value="0" class="bevel-inset">
+                <input type="text" class="calc-display bevel-inset" readonly value="0">
                 <div class="calc-grid">
                     <button class="win95-btn red" onclick="calcClear(this)">C</button>
                     <button class="win95-btn" onclick="calcOp(this, '/')">/</button>
@@ -293,8 +324,8 @@
         </div>
 
         <!-- MS-DOS -->
-        <div id="tpl-msdos" class="window-content-inner msdos-bg">
-            <div class="msdos-content">
+        <div id="tpl-msdos" class="window-content-inner">
+            <div class="msdos-content dos-bg">
                 <p>Microsoft(R) Windows 95</p>
                 <p>   (C)Copyright Microsoft Corp 1981-1995.</p>
                 <div class="dos-history"></div>
@@ -319,56 +350,19 @@
             </div>
         </div>
 
-        <!-- Resume (Updated name to Aryan Vala as requested) -->
+        <!-- Resume - PDF Viewer -->
         <div id="tpl-resume" class="window-content-inner">
-            <div class="resume-content">
-                <div class="resume-header">
-                    <h1 style="margin:0;">Aryan S. Vala</h1>
-                    <p>Full-Stack Developer | Backend Lead</p>
-                    <p style="font-size: 13px; margin-top:5px;">+91 6355751960 | aryanvala88@gmail.com</p>
-                </div>
-                
-                <div class="resume-section">
-                    <h4>Summary</h4>
-                    <p>Final-year Computer Engineering diploma student specializing in cross-platform mobile development (Flutter) and robust backend systems (SQL, .NET, Firebase). Adept at multitasking and managing deadlines in fast-paced project environments.</p>
-                </div>
-
-                <div class="resume-section">
-                    <h4>Experience</h4>
-                    <p><strong>Flutter Developer for a School</strong> (2019 - Present)</p>
-                    <ul style="padding-left: 20px; font-size: 13px;">
-                        <li>Architected a comprehensive school management solution using Flutter & Firebase.</li>
-                        <li>Engineered a secure Student Datastore using Cloud Firestore.</li>
-                        <li>Implemented Fees Management module to automate payment tracking & receipts.</li>
-                        <li>Designed NoSQL data models & Firebase Security Rules.</li>
-                    </ul>
-                    <p style="margin-top:10px;"><strong>Server & Network Manager</strong> (2019 - Present)</p>
-                    <ul style="padding-left: 20px; font-size: 13px;">
-                        <li>Administered IT infrastructure (Windows/Linux servers, NAS).</li>
-                        <li>Managed LAN/WLAN, routers, switches & access points.</li>
-                        <li>Implemented network security & data backup protocols.</li>
-                    </ul>
-                </div>
-
-                <div class="resume-section">
-                    <h4>Projects</h4>
-                    <ul style="padding-left: 20px; font-size: 13px;">
-                        <li><strong>Fine-Tuned LLM (3.4B):</strong> Llama-based model.</li>
-                        <li><strong>LLM Wrapper:</strong> DotNet, MySQL.</li>
-                        <li><strong>School/Gym Management:</strong> Flutter, Firebase.</li>
-                        <li><strong>Recipe App:</strong> Flutter, Firebase.</li>
-                        <li><strong>Live Texting WebApp:</strong> NodeJS, ExpressJS.</li>
-                    </ul>
-                </div>
-
-                <div class="resume-section">
-                    <h4>Education</h4>
-                    <p><strong>Diploma in Computer Engineering</strong> - Darshan University (Will Complete: 2026)</p>
-                </div>
-
-                <div class="center-flex" style="margin-top:20px;">
-                    <button class="win95-btn" onclick="alert('Printing Resume...')">Print Resume</button>
-                </div>
+            <div class="menu-bar">
+                <span onclick="printResume(this)"><u>P</u>rint</span>
+                <span onclick="downloadResume()"><u>D</u>ownload</span>
+                <span><u>H</u>elp</span>
+            </div>
+            <div class="resume-pdf-wrapper" style="flex-grow:1; overflow:hidden; position:relative;">
+                <iframe src="./assets/Aryan-Vala-CV.pdf" style="width:100%; height:100%; border:none; background:#fff;"></iframe>
+            </div>
+            <div class="resume-toolbar bevel-outset" style="padding:4px 8px; display:flex; justify-content:center; gap:8px; flex-shrink:0;">
+                <button class="win95-btn" onclick="printResume(this)">🖨️ Print</button>
+                <button class="win95-btn" onclick="downloadResume()">💾 Download PDF</button>
             </div>
         </div>
 
@@ -387,11 +381,99 @@
 
         <!-- Control Panel -->
         <div id="tpl-control" class="window-content-inner">
+            <div class="menu-bar"><span><u>F</u>ile</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+            <div class="file-explorer-bar bevel-inset"><span>Address: Control Panel</span></div>
             <div class="project-grid">
-                <div class="project-file"><div class="icon-img ico-settings"></div><div class="project-name">Display</div></div>
-                <div class="project-file"><div class="icon-img ico-settings"></div><div class="project-name">Mouse</div></div>
-                <div class="project-file"><div class="icon-img ico-settings"></div><div class="project-name">System</div></div>
+                <div class="project-file" ondblclick="openWindow('display')"><div class="icon-img ico-settings"></div><div class="project-name">Display</div></div>
+                <div class="project-file" ondblclick="showAboutDialog('Mouse', 'Mouse Properties allow you to configure your pointer settings.')"><div class="icon-img ico-settings"></div><div class="project-name">Mouse</div></div>
+                <div class="project-file" ondblclick="showAboutDialog('System', 'ValaNuOS 95\\nProcessor: Pentium-S 133MHz\\nRAM: 64MB\\nDeveloped by Aryan Vala')"><div class="icon-img ico-settings"></div><div class="project-name">System</div></div>
             </div>
+        </div>
+
+        <!-- Display Properties -->
+        <div id="tpl-display" class="window-content-inner">
+            <div class="content-padding" style="background:#c0c0c0;">
+                <fieldset class="bevel-inset" style="padding: 15px; margin-bottom: 10px;">
+                    <legend style="background: #c0c0c0; padding: 0 5px;">Desktop Background</legend>
+                    <p style="margin-top:0; margin-bottom: 10px;">Select a color or pattern for your desktop background.</p>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <button class="win95-btn" onclick="setTheme('#008080')">Classic Teal</button>
+                        <button class="win95-btn" onclick="setTheme('#000')">Pitch Black</button>
+                        <button class="win95-btn" onclick="setTheme('#000080')">Deep Navy</button>
+                        <button class="win95-btn" onclick="setTheme('url(./assets/icons/epa-logo.webp) repeat')">EPA Pattern</button>
+                    </div>
+                </fieldset>
+                <div style="display:flex; justify-content:flex-end; gap:6px;">
+                    <button class="win95-btn" onclick="closeWindow(this.closest('.window').id)">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Run Dialog -->
+        <div id="tpl-run" class="window-content-inner">
+            <div class="content-padding" style="background:#c0c0c0;">
+                <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:15px;">
+                    <div class="icon-img ico-run" style="width:32px; height:32px; flex-shrink:0;"></div>
+                    <div>
+                        <p style="margin:0 0 10px 0;">Type the name of a program, folder, document, or Internet resource, and ValaNuOS will open it for you.</p>
+                        <div class="form-group" style="margin:0;"><label>Open:</label><input type="text" class="run-input bevel-inset" placeholder="Type a command..."></div>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:6px;">
+                    <button class="win95-btn" onclick="executeRunCommand(this)">OK</button>
+                    <button class="win95-btn" onclick="closeWindow(this.closest('.window').id)">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Dialog -->
+        <div id="tpl-about" class="window-content-inner">
+            <div class="content-padding" style="background:#c0c0c0; text-align:center;">
+                <div class="icon-img ico-computer" style="width:48px; height:48px; margin:0 auto 10px auto;"></div>
+                <h3 style="margin:0 0 5px 0;">ValaNuOS 95</h3>
+                <p style="margin:0; font-size:12px;">Version 4.00.950</p>
+                <p style="margin:5px 0; font-size:12px;">Copyright © 2024 Aryan Vala</p>
+                <hr style="border:none; border-top:1px solid #808080; border-bottom:1px solid #fff; margin:10px 0;">
+                <p class="about-message" style="margin:5px 0; font-size:12px; white-space:pre-line;"></p>
+                <button class="win95-btn" style="margin:10px auto 0 auto;" onclick="closeWindow(this.closest('.window').id)">OK</button>
+            </div>
+        </div>
+
+        <!-- Minesweeper -->
+        <div id="tpl-minesweeper" class="window-content-inner">
+            <div class="menu-bar"><span><u>G</u>ame</span><span><u>H</u>elp</span></div>
+            <div class="minesweeper-wrapper bevel-inset">
+                <div class="minesweeper-header bevel-inset">
+                    <div class="ms-counter ms-mines">010</div>
+                    <button class="ms-face win95-btn" onclick="initMinesweeper(this.closest('.window'))">🙂</button>
+                    <div class="ms-counter ms-timer">000</div>
+                </div>
+                <div class="minesweeper-grid bevel-inset"></div>
+            </div>
+        </div>
+
+        <!-- Media Player -->
+        <div id="tpl-mediaplayer" class="window-content-inner" style="background: #000; padding: 2px;">
+            <div class="menu-bar" style="background: #c0c0c0; margin: -2px -2px 2px -2px;">
+                <span><u>F</u>ile</span><span><u>V</u>iew</span><span><u>P</u>lay</span>
+            </div>
+            <div class="mp-visualizer">
+                <div class="mp-title">Retro Tunes.mp3</div>
+                <div class="mp-time">00:00</div>
+                <div class="mp-bars">
+                    <span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="mp-controls bevel-outset" style="background: #c0c0c0; padding: 5px; display: flex; gap: 5px; align-items: center;">
+                <button class="win95-btn" onclick="mpAction(this, 'play')">▶</button>
+                <button class="win95-btn" onclick="mpAction(this, 'pause')">⏸</button>
+                <button class="win95-btn" onclick="mpAction(this, 'stop')">⏹</button>
+                <button class="win95-btn" onclick="this.nextElementSibling.click()" style="margin-left:auto;">📂 Open</button>
+                <input type="file" accept="audio/*" class="mp-file-input" style="display:none;" onchange="mpLoadFile(this)">
+            </div>
+            <!-- Empty src to be loaded on init -->
+            <audio class="mp-audio" loop></audio>
         </div>
 
     </div>
@@ -401,7 +483,7 @@
         <button id="start-btn" onclick="toggleStartMenu(event)"><div class="start-icon"></div><b>Start</b></button>
         <div class="taskbar-divider"></div>
         <div id="task-list"></div>
-        <div class="tray-area bevel-inset"><div class="tray-icon volume"></div><div id="clock">12:00 PM</div></div>
+        <div class="tray-area bevel-inset"><div class="tray-icon volume" onclick="toggleMute()" title="Click to mute/unmute" style="cursor:pointer;"></div><div id="clock">12:00 PM</div></div>
     </div>
 
     <!-- START MENU -->
@@ -419,8 +501,8 @@
                             <li class="start-item" onclick="openWindow('calc')"><span class="icon-sm ico-calc"></span>Calculator</li>
                         </ul>
                     </li>
-                    <li class="start-item" onclick="openWindow('projects')"><span class="icon-sm ico-folder"></span>My Projects</li>
-                    <li class="start-item" onclick="openWindow('doom')"><span class="icon-sm ico-run"></span>DOOM</li>
+                    <li class="start-item" onclick="openWindow('projects')"><span class="icon-sm ico-projects"></span>My Projects</li>
+                    <li class="start-item" onclick="openWindow('doom')"><span class="icon-sm ico-doom"></span>DOOM</li>
                     <li class="start-item" onclick="openWindow('msdos')"><span class="icon-sm ico-msdos"></span>MS-DOS Prompt</li>
                     <li class="start-item" onclick="openWindow('internet')"><span class="icon-sm ico-internet"></span>Aryan Explorer</li>
                 </ul>
@@ -444,12 +526,19 @@
         </ul>
     </div>
 
-    <!-- CONTEXT MENU -->
+    <!-- CONTEXT MENU (TASKBAR) -->
     <div id="context-menu" class="bevel-outset">
         <div class="ctx-item" onclick="ctxAction('restore')">Restore</div>
         <div class="ctx-item" onclick="ctxAction('minimize')">Minimize</div>
         <div class="ctx-divider"></div>
         <div class="ctx-item" onclick="ctxAction('close')">Close</div>
+    </div>
+
+    <!-- CONTEXT MENU (DESKTOP) -->
+    <div id="desktop-context-menu" class="bevel-outset">
+        <div class="ctx-item" onclick="location.reload()">Refresh</div>
+        <div class="ctx-divider"></div>
+        <div class="ctx-item" onclick="openWindow('display'); document.getElementById('desktop-context-menu').style.display='none';">Properties</div>
     </div>
 
     <!-- AUDIO ASSETS -->
@@ -458,6 +547,22 @@
     <audio id="snd-click" src="./assets/audio/WinClick.mp3" preload="auto"></audio>
     <audio id="snd-chord" src="./assets/audio/windowsChords.mp3" preload="auto"></audio>
     <audio id="snd-recycle" src="./assets/audio/windows-xp-recycle-bin.mp3" preload="auto"></audio>
+
+    <!-- CLIPPY ASSISTANT -->
+    <div id="clippy-container" style="display:none;">
+        <div class="clippy-bubble bevel-outset">
+            <p id="clippy-text" style="margin-top:0;">It looks like you're exploring Aryan's portfolio. Would you like some help?</p>
+            <div class="clippy-actions">
+                <button class="win95-btn" onclick="openWindow('projects'); closeClippy();">📂 See Projects</button>
+                <button class="win95-btn" onclick="openWindow('resume'); closeClippy();">📄 View Resume</button>
+                <button class="win95-btn" onclick="openWindow('skills'); closeClippy();">💡 Show Skills</button>
+                <button class="win95-btn" onclick="openWindow('doom'); closeClippy();">🔫 Play DOOM</button>
+                <button class="win95-btn" onclick="openWindow('contact'); closeClippy();">✉️ Send Email</button>
+                <button class="win95-btn" onclick="closeClippy()">❌ No thanks</button>
+            </div>
+        </div>
+        <img src="./assets/icons/clippy.png?v=2" id="clippy-sprite" alt="Assistant" onclick="toggleClippyBubble()">
+    </div>
 
     <script src="./script/script.js"></script>
 </body>

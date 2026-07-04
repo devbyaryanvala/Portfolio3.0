@@ -5,8 +5,10 @@ const taskList = document.getElementById('task-list');
 const startMenu = document.getElementById('start-menu');
 const startBtn = document.getElementById('start-btn');
 const ctxMenu = document.getElementById('context-menu');
+const desktopCtxMenu = document.getElementById('desktop-context-menu');
 let activeContextTask = null;
 let deletedIcons = [];
+let painting = false;
 
 /* --- SOUND SYSTEM --- */
 const sounds = {
@@ -70,6 +72,15 @@ function triggerBootSteps() {
             document.getElementById('splash-screen').style.display = 'none';
             initClock(); 
             initDesktopIcons(); 
+            // Show Clippy immediately on boot
+            document.getElementById('clippy-container').style.display = 'flex';
+            playSound('chord');
+            
+            // Auto-show bubble after a brief delay
+            setTimeout(() => {
+                document.querySelector('.clippy-bubble').style.display = 'block';
+            }, 1000);
+
         }, 3000);
     }, 2500);
 }
@@ -164,7 +175,7 @@ function handleGlobalMove(e) {
         draggedWindow.style.height = newHeight + 'px';
     }
     
-    if(painting) drawPaint(e);
+    if(painting && typeof drawPaint === 'function') drawPaint(e);
 }
 
 document.addEventListener('mousemove', handleGlobalMove);
@@ -279,7 +290,8 @@ function openWindow(id) {
         'paint':'Vala Paint', 'resume':'Resume - Aryan Vala', 'contact':'New Message',
         'internet':'Aryan Explorer', 'recycle':'Recycle Bin', 'notepad':'Notepad',
         'calc':'Calculator', 'msdos':'MS-DOS Prompt', 'run':'Run', 'control':'Control Panel', 'help':'Help',
-        'doom':'DOOM'
+        'doom':'DOOM', 'about':'About', 'minesweeper':'Minesweeper', 'mediaplayer':'Media Player',
+        'display':'Display Properties'
     };
     
     // Icon Mappings
@@ -327,11 +339,16 @@ function openWindow(id) {
     if(id==='notepad') initNotepad(win);
     if(id==='msdos') initDOS(win);
     if(id==='computer') initComputer(win);
+    if(id==='projects') initProjects(win);
+    if(id==='doom') initDoom(win);
+    if(id==='run') initRun(win);
+    if(id==='minesweeper') initMinesweeper(win);
+    if(id==='mediaplayer') initMediaPlayer(win);
     if(id==='recycle') updateRecycleGrid(win);
     if(id==='internet') initInternet(win);
     if(id==='doom') initDoom(win);
     if(id==='projects') initProjects(win);
-    if(id==='resume') initResume(win);
+    if(id==='run') initRun(win);
 
     startMenu.style.display='none'; startBtn.classList.remove('active');
 }
@@ -487,6 +504,13 @@ function initDOS(win) {
             const cmd = input.value.trim();
             history.innerHTML += `<div>${dosPath}> ${cmd}</div>`;
             const args = cmd.toLowerCase().split(' ');
+            
+            // BSOD Easter Egg Triggers
+            if (['crash', 'format', 'bsod'].includes(args[0])) {
+                triggerBSOD();
+                return;
+            }
+            
             if(args[0]==='help') history.innerHTML += `<div>COMMANDS: HELP, DIR, VER, CLS, CD, ECHO, EXIT</div>`;
             else if(args[0]==='ver') history.innerHTML += `<div>ValaNuOS [Version 4.00.950]</div>`;
             else if(args[0]==='cls') history.innerHTML = '';
@@ -495,11 +519,36 @@ function initDOS(win) {
                 if(args[1] === '..') dosPath = "C:\\"; else if(args[1]) dosPath += "\\" + args[1]; 
                 win.querySelector('.dos-prompt').innerText = dosPath + ">"; 
             }
-            else if(args[0]==='dir') history.innerHTML += `<div>Directory of ${dosPath}<br> . <DIR><br> .. <DIR><br> SYSTEM <DIR><br> 3 file(s)</div>`;
+            else if(args[0]==='dir') history.innerHTML += `<div>Directory of ${dosPath}<br> . &lt;DIR&gt;<br> .. &lt;DIR&gt;<br> SYSTEM &lt;DIR&gt;<br> 3 file(s)</div>`;
             else if(args[0]==='exit') closeWindow(win.id);
             else if(cmd) history.innerHTML += `<div>Bad command or file name</div>`;
             input.value=''; win.querySelector('.window-content-inner').scrollTop = win.querySelector('.window-content-inner').scrollHeight;
         }
+    });
+}
+
+function triggerBSOD() {
+    const bsod = document.getElementById('bsod-screen');
+    bsod.style.display = 'flex';
+    bsod.focus();
+    
+    // Stop all sounds
+    Object.values(sounds).forEach(s => {
+        s.pause();
+        s.currentTime = 0;
+    });
+
+    // Play error sound repeatedly for effect
+    let crashCount = 0;
+    const crashInterval = setInterval(() => {
+        if (!isMuted) sounds.error.play();
+        crashCount++;
+        if (crashCount > 5) clearInterval(crashInterval);
+    }, 100);
+
+    // Any key reloads the page
+    bsod.addEventListener('keydown', () => {
+        window.location.reload();
     });
 }
 
@@ -510,95 +559,117 @@ function initInternet(win) {
     const viewport = win.querySelector('.ie-viewport'); 
     const toolbar = win.querySelector('.address-bar');
 
-    if (!toolbar.querySelector('.retro-check')) {
-        const label = document.createElement('label');
-        label.className = 'retro-check';
-        label.style.marginLeft = '10px'; label.style.fontSize = '11px'; label.style.display = 'flex'; label.style.alignItems = 'center';
-        
-        const chk = document.createElement('input');
-        chk.type = 'checkbox';
-        chk.checked = true;
-        chk.style.marginRight = '4px';
-        
-        const span = document.createElement('span');
-        span.innerText = "Retro Mode";
-        
-        label.appendChild(chk); label.appendChild(span); toolbar.appendChild(label);
-
+    if (!toolbar.querySelector('.ie-ext-btn')) {
         const extBtn = document.createElement('button');
-        extBtn.className = 'win95-btn';
+        extBtn.className = 'win95-btn ie-ext-btn';
         extBtn.innerHTML = '&#x2197;'; 
         extBtn.title = "Open in New Tab";
         extBtn.style.marginLeft = '5px';
-        extBtn.onclick = () => window.open(urlInput.value.startsWith('http')?urlInput.value:'https://'+urlInput.value, '_blank');
+        extBtn.onclick = () => {
+            let u = urlInput.value.trim();
+            if (!u.startsWith('http')) u = 'https://' + u;
+            window.open(u, '_blank');
+        };
         toolbar.appendChild(extBtn);
     }
 
-    const loadUrl = async () => {
-        let url = urlInput.value.trim();
-        if (!url.includes('.') && !url.startsWith('http')) {
-            url = 'https://www.bing.com/search?q=' + encodeURIComponent(url);
-        } else if (!url.startsWith('http')) {
-            url = 'https://' + url;
-        }
-        urlInput.value = url;
-        
-        const useRetro = toolbar.querySelector('input[type="checkbox"]').checked;
-
-        if (useRetro) {
-            viewport.innerHTML = `<div style="padding:20px; font-family:'Segoe UI'; text-align:center;">
-                <p><strong>Connecting...</strong></p>
-                <div class="progress-bar-win bevel-inset" style="width:200px; height:20px; margin:0 auto; position:relative;">
-                    <div style="background:#000080; width:50%; height:100%;"></div>
+    const showHomepage = () => {
+        urlInput.value = 'home';
+        viewport.innerHTML = `<div style="padding:20px; font-family:'Segoe UI',sans-serif; background:#fff; height:100%; overflow:auto;">
+            <div style="text-align:center; padding:20px 0; border-bottom:2px solid #000080;">
+                <div class="icon-img ico-internet" style="width:48px;height:48px;margin:0 auto 8px auto;"></div>
+                <h2 style="margin:0; color:#000080; font-size:22px;">Aryan Explorer</h2>
+                <p style="margin:4px 0 0; font-size:12px; color:#808080;">Your Window to the Internet</p>
+            </div>
+            <div style="max-width:500px; margin:20px auto;">
+                <p style="font-size:13px; margin:0 0 12px; font-weight:bold;">🔍 Quick Search</p>
+                <p style="font-size:12px; color:#666; margin:0 0 15px;">Type anything in the address bar and press Go to search Google.</p>
+                <p style="font-size:13px; margin:0 0 8px; font-weight:bold;">⭐ Bookmarks</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                    <div class="win95-btn" style="cursor:pointer; padding:8px; justify-content:flex-start;" onclick="window.open('https://github.com/devbyaryanvala', '_blank');">
+                        📁 My GitHub ↗
+                    </div>
+                    <div class="win95-btn" style="cursor:pointer; padding:8px; justify-content:flex-start;" onclick="window.open('https://www.linkedin.com/in/aryan-vala-ba62a1212/', '_blank');">
+                        💼 My LinkedIn ↗
+                    </div>
+                    <div class="win95-btn" style="cursor:pointer; padding:8px; justify-content:flex-start;" onclick="window.open('https://en.wikipedia.org', '_blank');">
+                        📖 Wikipedia ↗
+                    </div>
+                    <div class="win95-btn" style="cursor:pointer; padding:8px; justify-content:flex-start;" onclick="window.open('https://projects.aryanvala.online', '_blank');">
+                        🚀 My Projects ↗
+                    </div>
                 </div>
-            </div>`;
-            
-            try {
-                const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`);
-                if(!res.ok) throw new Error("Connection failed");
-                let html = await res.text();
-                
-                html = html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "");
-                html = html.replace(/X-Frame-Options/gim, ""); 
-                
-                const baseTag = `<base href="${url}" target="_self">`;
-                if(html.includes('<head>')) html = html.replace('<head>', '<head>' + baseTag);
-                else html = baseTag + html;
+                <hr style="border:none; border-top:1px solid #c0c0c0; margin:15px 0;">
+                <p style="font-size:11px; color:#808080; margin:0; text-align:center;">
+                    💡 Tip: Bookmarks open in a new tab for security reasons. Use the address bar for general browsing.
+                </p>
+            </div>
+        </div>`;
+    };
 
-                const frame = document.createElement('iframe');
-                frame.style.cssText = "width:100%; height:100%; border:none; background:#fff;";
-                frame.sandbox = "allow-same-origin allow-forms allow-popups";
-                viewport.innerHTML = '';
-                viewport.appendChild(frame);
-                
-                const doc = frame.contentWindow.document;
-                doc.open(); doc.write(html); doc.close();
+    const loadUrl = () => {
+        let url = urlInput.value.trim();
+        if (!url || url === 'home') { showHomepage(); return; }
 
-                frame.contentWindow.document.addEventListener('click', function(e) {
-                    const link = e.target.closest('a');
-                    if(link && link.href) {
-                        e.preventDefault();
-                        window.parent.postMessage({action: 'loadUrl', url: link.href}, '*');
-                    }
-                });
-
-            } catch(e) {
-                viewport.innerHTML = `<div style="padding:20px; color:red;"><p>Error: ${e.message}</p></div>`;
-            }
-        } else {
-            viewport.innerHTML = `<iframe src="${url}" style="width:100%;height:100%;border:none;background:#fff;"></iframe>`;
+        // Text search → Google iframe search
+        if (!url.includes('.') && !url.startsWith('http')) {
+            url = 'https://www.google.com/search?igu=1&q=' + encodeURIComponent(url);
+            urlInput.value = url;
+            viewport.innerHTML = '';
+            const frame = document.createElement('iframe');
+            frame.style.cssText = "width:100%; height:100%; border:none; background:#fff;";
+            frame.src = url;
+            viewport.appendChild(frame);
+            return;
         }
+
+        // Ensure https prefix
+        if (!url.startsWith('http')) url = 'https://' + url;
+        urlInput.value = url;
+
+        // Show loading state
+        viewport.innerHTML = `<div style="padding:40px; font-family:'Segoe UI'; text-align:center; color:#000;">
+            <div class="icon-img ico-internet" style="width:32px;height:32px;margin:0 auto 10px auto;"></div>
+            <p style="margin:0;"><strong>Connecting to ${new URL(url).hostname}...</strong></p>
+            <div class="bevel-inset" style="width:260px; height:18px; margin:15px auto; padding:2px; background:#fff;">
+                <div style="background:linear-gradient(90deg, #000080, #1084d0); height:100%; animation: ieLoad 2s ease-in-out infinite; width:30%;"></div>
+            </div>
+            <p style="font-size:11px; color:#808080; margin:0;">If the page doesn't load, use ↗ to open in a new tab</p>
+        </div>`;
+
+        // Try direct iframe — many sites allow this
+        const frame = document.createElement('iframe');
+        frame.style.cssText = "width:100%; height:100%; border:none; background:#fff;";
+        frame.setAttribute('referrerpolicy', 'no-referrer');
+        frame.src = url;
+
+        // Track if iframe loaded successfully
+        let didLoad = false;
+        frame.onload = () => { didLoad = true; };
+
+        // After a delay, check if it loaded. If not, try Google Translate proxy
+        setTimeout(() => {
+            if (!didLoad) {
+                // Use Google Translate as a proxy — this reliably loads most sites
+                try {
+                    const parsedUrl = new URL(url);
+                    const translateUrl = `https://translate.google.com/translate?sl=auto&tl=en&u=${encodeURIComponent(url)}`;
+                    frame.src = translateUrl;
+                } catch(e) { /* invalid URL, ignore */ }
+            }
+        }, 3000);
+
+        viewport.innerHTML = '';
+        viewport.appendChild(frame);
     };
     
-    // Add event listener only once per window load
-    if(!window.messageListenerAdded) {
+    // Add event listener only once
+    if (!window.messageListenerAdded) {
         window.addEventListener('message', (event) => {
-            if(event.data && event.data.action === 'loadUrl') {
-                // Find the active internet window
+            if (event.data && event.data.action === 'loadUrl') {
                 const activeWin = document.querySelector('.window[data-app-type="internet"]:not(.inactive)');
-                if(activeWin) {
+                if (activeWin) {
                     activeWin.querySelector('.url-input').value = event.data.url;
-                    // Trigger click on go button of that window
                     activeWin.querySelector('.go-btn').click(); 
                 }
             }
@@ -608,6 +679,9 @@ function initInternet(win) {
 
     goBtn.onclick = (e) => { e.stopPropagation(); loadUrl(); };
     urlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') loadUrl(); });
+    
+    // Show homepage on open
+    showHomepage();
 }
 
 /* --- APP: COMPUTER --- */
@@ -658,29 +732,93 @@ function initProjects(win) {
     }
 }
 
-/* --- APP: RESUME (DOWNLOAD FIX) --- */
-function initResume(win) {
-    // Add logic to handle download button click
-    const downloadBtn = document.createElement('button');
-    downloadBtn.className = 'win95-btn';
-    downloadBtn.innerText = 'Download PDF';
-    downloadBtn.style.marginTop = '10px';
-    downloadBtn.onclick = downloadResume;
-    
-    // Find the print button container and append the download button
-    const centerFlex = win.querySelector('.center-flex');
-    if (centerFlex) {
-        centerFlex.appendChild(downloadBtn);
-    }
-}
-
+/* --- APP: RESUME (PDF VIEWER) --- */
 function downloadResume() {
     const link = document.createElement('a');
-    link.href = './assets/Aryan-Vala-CV.pdf'; // Assuming the file is in the same directory
-    link.download = './assets/Aryan-Vala-CV.pdf';
+    link.href = './assets/Aryan-Vala-CV.pdf';
+    link.download = 'Aryan-Vala-CV.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function printResume(btn) {
+    const win = btn.closest('.window');
+    const iframe = win ? win.querySelector('.resume-pdf-wrapper iframe') : null;
+    if (iframe && iframe.contentWindow) {
+        try { iframe.contentWindow.print(); } catch(e) { window.open('./assets/Aryan-Vala-CV.pdf', '_blank'); }
+    } else {
+        window.open('./assets/Aryan-Vala-CV.pdf', '_blank');
+    }
+}
+
+/* --- APP: RUN DIALOG --- */
+function initRun(win) {
+    const input = win.querySelector('.run-input');
+    if (input) {
+        input.focus();
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') executeRunCommand(input);
+        });
+    }
+}
+
+function executeRunCommand(btn) {
+    const win = btn.closest('.window');
+    const input = win.querySelector('.run-input');
+    const cmd = input ? input.value.trim().toLowerCase() : '';
+    const appMap = {
+        'paint': 'paint', 'mspaint': 'paint', 'notepad': 'notepad',
+        'calc': 'calc', 'calculator': 'calc', 'cmd': 'msdos',
+        'msdos': 'msdos', 'doom': 'doom', 'internet': 'internet',
+        'explorer': 'computer', 'help': 'help', 'resume': 'resume',
+        'mail': 'contact', 'email': 'contact', 'projects': 'projects',
+        'skills': 'skills', 'control': 'control'
+    };
+    if (appMap[cmd]) {
+        closeWindow(win.id);
+        openWindow(appMap[cmd]);
+    } else if (cmd.startsWith('http') || cmd.includes('.')) {
+        closeWindow(win.id);
+        openWindow('internet');
+        setTimeout(() => {
+            const inetWin = document.querySelector('.window[data-app-type="internet"]');
+            if (inetWin) { inetWin.querySelector('.url-input').value = cmd; inetWin.querySelector('.go-btn').click(); }
+        }, 100);
+    } else if (cmd) {
+        alert('Cannot find "' + cmd + '". Make sure you typed the name correctly.');
+    }
+}
+
+/* --- ABOUT DIALOG --- */
+function showAboutDialog(title, message) {
+    openWindow('about');
+    setTimeout(() => {
+        const wins = document.querySelectorAll('.window[data-app-type="about"]');
+        const win = wins[wins.length - 1];
+        if (win) {
+            const msgEl = win.querySelector('.about-message');
+            if (msgEl) msgEl.textContent = message;
+            const titleText = win.querySelector('.title-text');
+            if (titleText) titleText.lastChild.textContent = ' ' + title;
+        }
+    }, 50);
+}
+
+/* --- MUTE TOGGLE --- */
+let isMuted = false;
+function toggleMute() {
+    isMuted = !isMuted;
+    const volIcon = document.querySelector('.tray-icon.volume');
+    if (isMuted) {
+        Object.values(sounds).forEach(s => s.volume = 0);
+        volIcon.style.opacity = '0.4';
+        volIcon.title = 'Sound: Muted (click to unmute)';
+    } else {
+        Object.values(sounds).forEach(s => s.volume = 1);
+        volIcon.style.opacity = '1';
+        volIcon.title = 'Sound: On (click to mute)';
+    }
 }
 
 function toggleStartMenu(e) {
@@ -691,21 +829,231 @@ function toggleStartMenu(e) {
 document.addEventListener('click', (e) => {
     if(!startMenu.contains(e.target) && !startBtn.contains(e.target)) { startMenu.style.display='none'; startBtn.classList.remove('active'); }
     if(!e.target.closest('#context-menu')) { ctxMenu.style.display = 'none'; }
+    if(desktopCtxMenu && !e.target.closest('#desktop-context-menu')) { desktopCtxMenu.style.display = 'none'; }
+});
+
+// Desktop Right Click Menu
+document.addEventListener('contextmenu', (e) => {
+    if(!e.target.closest('.window') && !e.target.closest('.taskbar') && !e.target.closest('.desktop-icon') && !e.target.closest('#clippy-container')) {
+        e.preventDefault();
+        desktopCtxMenu.style.display = 'block';
+        desktopCtxMenu.style.left = e.clientX + 'px';
+        desktopCtxMenu.style.top = e.clientY + 'px';
+    } else if (desktopCtxMenu) {
+        desktopCtxMenu.style.display = 'none';
+    }
 });
 function ctxAction(a) {
     if(!activeContextTask) return;
-    if(a==='close') closeWindow(activeContextTask.replace('win-',''));
+    if(a==='close') closeWindow(activeContextTask);
     if(a==='minimize') minimizeWindow(activeContextTask);
     if(a==='restore') bringToFront(document.getElementById(activeContextTask));
     ctxMenu.style.display='none';
 }
 function performShutdown() {
+    startMenu.style.display='none'; startBtn.classList.remove('active');
     desktop.style.display='none'; document.getElementById('taskbar').style.display='none';
     document.getElementById('shutdown-screen').style.display='flex';
     playSound('shutdown');
 }
-function sendEmail() {
-    const subject = document.getElementById('email-subject').value;
-    const body = document.getElementById('email-body').value;
-    window.location.href = `mailto:aryanvala66@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+function sendEmail(form) {
+    const subject = form.querySelector('.email-subject').value;
+    const body = form.querySelector('.email-body').value;
+    window.location.href = `mailto:aryanvala88@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
+
+/* --- CLIPPY ASSISTANT --- */
+function toggleClippyBubble() {
+    const bubble = document.querySelector('.clippy-bubble');
+    if (bubble) {
+        bubble.style.display = (bubble.style.display === 'none' || bubble.style.display === '') ? 'block' : 'none';
+        if (bubble.style.display === 'block') playSound('click');
+    }
+}
+
+function closeClippy() {
+    const container = document.getElementById('clippy-container');
+    if (container) container.style.display = 'none';
+}
+
+/* --- APP: MEDIA PLAYER --- */
+function initMediaPlayer(win) {
+    const audio = win.querySelector('.mp-audio');
+    if (audio && !audio.src) {
+        audio.src = './assets/audio/windowsChords.mp3';
+    }
+}
+function mpAction(btn, action) {
+    const win = btn.closest('.window');
+    const audio = win.querySelector('.mp-audio');
+    const bars = win.querySelector('.mp-bars');
+    const timeDisplay = win.querySelector('.mp-time');
+    
+    if (action === 'play') {
+        audio.play();
+        bars.classList.add('active');
+        if (!audio.dataset.interval) {
+            audio.dataset.interval = setInterval(() => {
+                const mins = Math.floor(audio.currentTime / 60).toString().padStart(2, '0');
+                const secs = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+                if(timeDisplay) timeDisplay.innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+    } else if (action === 'pause') {
+        audio.pause();
+        bars.classList.remove('active');
+    } else if (action === 'stop') {
+        audio.pause();
+        audio.currentTime = 0;
+        bars.classList.remove('active');
+        if(timeDisplay) timeDisplay.innerText = '00:00';
+    }
+}
+function mpLoadFile(input) {
+    const win = input.closest('.window');
+    const audio = win.querySelector('.mp-audio');
+    const titleDisplay = win.querySelector('.mp-title');
+    
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        
+        // Use URL.createObjectURL to allow playing a local file directly
+        const fileURL = URL.createObjectURL(file);
+        
+        // Stop current playing song if any
+        mpAction(input, 'stop');
+        
+        // Load the new file
+        audio.src = fileURL;
+        titleDisplay.innerText = file.name;
+        
+        // Auto-play
+        setTimeout(() => mpAction(input, 'play'), 200);
+    }
+}
+
+/* --- APP: MINESWEEPER --- */
+function initMinesweeper(win) {
+    const grid = win.querySelector('.minesweeper-grid');
+    const face = win.querySelector('.ms-face');
+    const timerEl = win.querySelector('.ms-timer');
+    const minesEl = win.querySelector('.ms-mines');
+    
+    // Config (Beginner: 9x9, 10 mines)
+    const rows = 9, cols = 9, totalMines = 10;
+    let board = [], mines = [], gameOver = false, flags = 0, revealedCount = 0, timer = 0, timerInterval = null;
+    
+    grid.innerHTML = '';
+    grid.style.gridTemplateColumns = `repeat(${cols}, 20px)`;
+    grid.style.gridTemplateRows = `repeat(${rows}, 20px)`;
+    face.innerText = '🙂';
+    minesEl.innerText = String(totalMines).padStart(3, '0');
+    timerEl.innerText = '000';
+    if(win.dataset.timerInterval) clearInterval(win.dataset.timerInterval);
+    
+    // Initialize Board Arrays
+    for(let r=0; r<rows; r++) {
+        board[r] = [];
+        for(let c=0; c<cols; c++) board[r][c] = { mine: false, revealed: false, flagged: false, count: 0, el: null };
+    }
+    
+    // Plant Mines
+    let planted = 0;
+    while(planted < totalMines) {
+        let r = Math.floor(Math.random() * rows), c = Math.floor(Math.random() * cols);
+        if(!board[r][c].mine) { board[r][c].mine = true; mines.push({r,c}); planted++; }
+    }
+    
+    // Calculate Adjacent Numbers
+    const dirs = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+    for(let r=0; r<rows; r++) {
+        for(let c=0; c<cols; c++) {
+            if(board[r][c].mine) continue;
+            let count = 0;
+            dirs.forEach(d => {
+                let nr = r + d[0], nc = c + d[1];
+                if(nr>=0 && nr<rows && nc>=0 && nc<cols && board[nr][nc].mine) count++;
+            });
+            board[r][c].count = count;
+        }
+    }
+    
+    // Build UI
+    const startTimer = () => {
+        if(!timerInterval) {
+            timerInterval = setInterval(() => { timer++; timerEl.innerText = String(Math.min(timer, 999)).padStart(3, '0'); }, 1000);
+            win.dataset.timerInterval = timerInterval;
+        }
+    };
+    const checkWin = () => {
+        if (revealedCount === (rows * cols) - totalMines) {
+            gameOver = true; face.innerText = '😎'; clearInterval(timerInterval);
+        }
+    };
+    const reveal = (r, c) => {
+        if(gameOver || board[r][c].revealed || board[r][c].flagged) return;
+        startTimer();
+        board[r][c].revealed = true; revealedCount++;
+        const cell = board[r][c].el;
+        cell.classList.add('revealed');
+        
+        if(board[r][c].mine) {
+            cell.classList.add('mine'); cell.innerText = '💣'; gameOver = true; face.innerText = '😵';
+            clearInterval(timerInterval);
+            mines.forEach(m => {
+                if(!board[m.r][m.c].flagged) { board[m.r][m.c].el.classList.add('revealed', 'mine'); board[m.r][m.c].el.innerText = '💣'; }
+            });
+            return;
+        }
+        
+        if(board[r][c].count > 0) {
+            cell.innerText = board[r][c].count; cell.classList.add('ms-c' + board[r][c].count);
+        } else {
+            dirs.forEach(d => {
+                let nr = r + d[0], nc = c + d[1];
+                if(nr>=0 && nr<rows && nc>=0 && nc<cols) reveal(nr, nc);
+            });
+        }
+        checkWin();
+    };
+    
+    for(let r=0; r<rows; r++) {
+        for(let c=0; c<cols; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'ms-cell';
+            board[r][c].el = cell;
+            cell.addEventListener('mousedown', (e) => {
+                if(gameOver) return;
+                if(e.button === 0 && !board[r][c].flagged) { face.innerText = '😮'; }
+            });
+            cell.addEventListener('mouseup', (e) => {
+                if(gameOver) return;
+                face.innerText = '🙂';
+                if(e.button === 0) {
+                    reveal(r, c);
+                } else if(e.button === 2) {
+                    if(!board[r][c].revealed) {
+                        board[r][c].flagged = !board[r][c].flagged;
+                        cell.innerText = board[r][c].flagged ? '🚩' : '';
+                        flags += board[r][c].flagged ? 1 : -1;
+                        minesEl.innerText = String(Math.max(totalMines - flags, 0)).padStart(3, '0');
+                    }
+                }
+            });
+            cell.addEventListener('contextmenu', (e) => e.preventDefault());
+            grid.appendChild(cell);
+        }
+    }
+}
+
+/* --- THEME SYSTEM --- */
+function setTheme(val) {
+    document.getElementById('desktop').style.background = val;
+    localStorage.setItem('win95_theme', val);
+}
+
+// Load saved theme on startup
+(function loadTheme() {
+    const savedTheme = localStorage.getItem('win95_theme');
+    if(savedTheme) document.getElementById('desktop').style.background = savedTheme;
+})();

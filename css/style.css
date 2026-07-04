@@ -154,6 +154,24 @@
     }
     .shutdown-msg { color: #e79e27; font-family: 'Segoe UI', sans-serif; font-size: 24px; font-weight: bold; }
 
+    #bsod-screen {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: #0000AA; z-index: 100000;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        color: #fff; font-family: 'VT323', monospace; font-size: 20px;
+    }
+    #bsod-screen:focus { outline: none; }
+    .bsod-content {
+        max-width: 600px; width: 100%; padding: 20px;
+    }
+    .bsod-content p { margin: 8px 0; line-height: 1.2; }
+    .bsod-badge {
+        display: inline-block; background: #c0c0c0; color: #0000AA;
+        padding: 2px 10px; margin-bottom: 20px; margin-left: 250px;
+        font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold;
+    }
+    .bsod-content .text-center { text-align: center; margin-top: 20px; }
+
     /* --- ICONS --- */
     #desktop { position: relative; width: 100%; height: calc(100% - 28px); z-index: 1; }
     .desktop-icon {
@@ -168,39 +186,45 @@
     .icon-img {
         width: 32px; height: 32px; margin-bottom: 5px;
         background-repeat: no-repeat; background-position: center; background-size: contain;
-        background-image: url('https://win98icons.alexmeub.com/icons/png/application_hourglass_small-4.png');
+        background-image: url('../assets/icons/application_hourglass_small-4.png');
     }
     .icon-label { color: white; font-size: 12px; text-shadow: 1px 1px 0 #000; padding: 2px 4px; }
 
     /* Mappings */
-    .ico-computer { background-image: url('https://win98icons.alexmeub.com/icons/png/computer_explorer-4.png'); }
-    .ico-folder { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_closed-4.png'); }
-    .ico-folder-prog { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_program_group_small-4.png'); }
-    .ico-projects { background-image: url('https://win98icons.alexmeub.com/icons/png/briefcase-4.png'); } 
-    .ico-paint { background-image: url('https://win98icons.alexmeub.com/icons/png/paint_file-4.png'); }
-    .ico-recycle { background-image: url('https://win98icons.alexmeub.com/icons/png/recycle_bin_empty-4.png'); }
-    .ico-recycle-full { background-image: url('https://win98icons.alexmeub.com/icons/png/recycle_bin_full-4.png'); }
-    .ico-text { background-image: url('https://win98icons.alexmeub.com/icons/png/notepad_file-2.png'); }
-    .ico-notepad { background-image: url('https://win98icons.alexmeub.com/icons/png/notepad-0.png'); }
-    .ico-mail { background-image: url('https://win98icons.alexmeub.com/icons/png/outlook_express-4.png'); }
-    .ico-internet { background-image: url('https://win98icons.alexmeub.com/icons/png/msie1-4.png'); }
-    .ico-prog { background-image: url('https://win98icons.alexmeub.com/icons/png/application_hourglass_small-4.png'); }
-    .ico-html { background-image: url('https://win98icons.alexmeub.com/icons/png/mailbox_world-2.png'); }
-    .ico-settings { background-image: url('https://win98icons.alexmeub.com/icons/png/settings_gear-4.png'); }
-    .ico-calc { background-image: url('https://win98icons.alexmeub.com/icons/png/calculator-4.png'); }
-    .ico-msdos { background-image: url('https://win98icons.alexmeub.com/icons/png/console_prompt-4.png'); }
-    .ico-help { background-image: url('https://win98icons.alexmeub.com/icons/png/help_book_big-4.png'); }
-    .ico-run { background-image: url('https://win98icons.alexmeub.com/icons/png/application_hourglass_small-4.png'); }
-    .ico-shutdown { background-image: url('https://win98icons.alexmeub.com/icons/png/shut_down_cool-4.png'); }
-    .ico-programs { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_program_group_small-4.png'); }
-    .ico-accessories { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_program_group_small-4.png'); }
-    .ico-documents { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs-4.png'); }
-    .ico-control { background-image: url('https://win98icons.alexmeub.com/icons/png/settings_gear-4.png'); }
-    .ico-doom { background-image: url('https://js-dos.com/cdn/DOOM.png'); background-size: cover; }
+    .ico-computer { background-image: url('../assets/icons/computer_explorer-4.png'); }
+    .ico-folder { background-image: url('../assets/icons/directory_closed-4.png'); }
+    .ico-folder-prog { background-image: url('../assets/icons/directory_program_group_small-4.png'); }
+    .ico-projects { background-image: url('../assets/icons/directory_open_file_mydocs-4.png'); }
+    .ico-calc { background-image: url('../assets/icons/calculator-0.png'); }
+    .ico-msdos { background-image: url('../assets/icons/ms_dos-0.png'); }
+    .ico-internet { background-image: url('../assets/icons/msie1-4.png'); }
+    .ico-recycle { background-image: url('../assets/icons/recycle_bin_empty-4.png'); }
+    .ico-recycle-full { background-image: url('../assets/icons/recycle_bin_full-4.png'); }
+    .ico-text { background-image: url('../assets/icons/notepad_file-2.png'); }
+    .ico-mail { background-image: url('../assets/icons/outlook_express-4.png'); }
+    .ico-doom { background-image: url('../assets/icons/DOOM.png'); }
+    .ico-control { background-image: url('../assets/icons/settings_gear-4.png'); }
+    .ico-help { background-image: url('../assets/icons/help_book_big-4.png'); }
+    .ico-run { background-image: url('../assets/icons/application_hourglass_small-4.png'); }
+    .ico-minesweeper { background-image: url('../assets/icons/minesweeper.png?v=2'); }
+    .ico-mediaplayer { background-image: url('../assets/icons/mediaplayer.png?v=2'); }
+    .ico-paint { background-image: url('../assets/icons/paint_file-4.png'); }
+    .ico-notepad { background-image: url('../assets/icons/notepad-0.png'); }
+    .ico-prog { background-image: url('../assets/icons/application_hourglass_small-4.png'); }
+    .ico-html { background-image: url('../assets/icons/mailbox_world-2.png'); }
+    .ico-settings { background-image: url('../assets/icons/settings_gear-4.png'); }
+    .ico-help { background-image: url('../assets/icons/help_book_big-4.png'); }
+    .ico-run { background-image: url('../assets/icons/key_win-0.png'); }
+    .ico-shutdown { background-image: url('../assets/icons/shut_down_cool-4.png'); }
+    .ico-programs { background-image: url('../assets/icons/directory_program_group_small-4.png'); }
+    .ico-accessories { background-image: url('../assets/icons/directory_program_group_small-4.png'); }
+    .ico-documents { background-image: url('../assets/icons/directory_open_file_mydocs-4.png'); }
+    .ico-control { background-image: url('../assets/icons/settings_gear-4.png'); }
+    .ico-doom { background-image: url('../assets/icons/DOOM.png'); background-size: cover; }
 
     
-    .ico-github { background-image: url('https://win98icons.alexmeub.com/icons/png/directory_channels-5.png'); } /* Placeholder for GitHub */
-    .ico-linkedin { background-image: url('https://win98icons.alexmeub.com/icons/png/network_internet_pcs_installer-2.png'); } /* Placeholder for LinkedIn */
+    .ico-github { background-image: url('../assets/icons/directory_channels-5.png'); } /* Placeholder for GitHub */
+    .ico-linkedin { background-image: url('../assets/icons/network_internet_pcs_installer-2.png'); } /* Placeholder for LinkedIn */
 
     /* --- WINDOW SYSTEM --- */
     .window {
@@ -269,7 +293,7 @@
     #start-btn.active { border-style: inset; background: #d4d4d4; }
     .start-icon {
         width: 16px; height: 16px; 
-        background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Windows_Logo_%281992-2001%29.svg/1280px-Windows_Logo_%281992-2001%29.svg.png');
+        background-image: url('../assets/icons/1280px-Windows_Logo_%281992-2001%29.svg.png');
         background-size: cover; 
     }
     #task-list { flex-grow: 1; display: flex; gap: 3px; overflow: hidden; padding-left: 2px; }
@@ -289,7 +313,7 @@
         font-size: 12px;
     }
     .tray-icon.volume {
-        width: 16px; height: 16px; background-image: url('https://win98icons.alexmeub.com/icons/png/loudspeaker_rays-4.png'); background-size: cover;
+        width: 16px; height: 16px; background-image: url('../assets/icons/loudspeaker_rays-4.png'); background-size: cover;
     }
 
     /* --- START MENU (IMPROVED) --- */
@@ -337,7 +361,7 @@
     .item-content { display: flex; align-items: center; }
 
     /* --- CONTEXT MENU --- */
-    #context-menu { position: absolute; display: none; width: 150px; z-index: 30000; padding: 2px; }
+    #context-menu, #desktop-context-menu { position: absolute; display: none; width: 150px; z-index: 30000; padding: 2px; background: var(--win-gray); }
     .ctx-item { padding: 4px 10px; font-size: 12px; cursor: pointer; }
     .ctx-item:hover { background: var(--win-blue-title); color: #fff; }
     .ctx-divider { height: 1px; background: #808080; margin: 2px 0; }
@@ -381,10 +405,10 @@
     .tool-icon { width: 16px; height: 16px; background-size: contain; background-repeat: no-repeat; background-position: center; }
 
     /* UPDATED TOOL ICONS */
-    .tool-pencil { background-image: url('https://win98icons.alexmeub.com/icons/png/pencil-4.png'); }
-    .tool-brush { background-image: url('https://win98icons.alexmeub.com/icons/png/paint_brush-4.png'); }
-    .tool-eraser { background-image: url('https://win98icons.alexmeub.com/icons/png/eraser-4.png'); }
-    .tool-bucket { background-image: url('https://win98icons.alexmeub.com/icons/png/paint_bucket-4.png'); }
+    .tool-pencil { background-image: url('../assets/icons/pencil-4.png'); }
+    .tool-brush { background-image: url('../assets/icons/paint_brush-4.png'); }
+    .tool-eraser { background-image: url('../assets/icons/eraser-4.png'); }
+    .tool-bucket { background-image: url('../assets/icons/paint_bucket-4.png'); }
     .tool-clear { background: #fff; border: 1px solid #000; width: 12px; height: 12px; }
     .tool-line { width: 12px; height: 2px; background: #000; transform: rotate(-45deg); }
     .tool-rect { width: 14px; height: 10px; border: 1px solid #000; }
@@ -415,8 +439,123 @@
     .tree-view ul { list-style-type: none; padding-left: 20px; margin: 0; }
     .tree-view li { margin: 5px 0; }
     .tree-icon { display: inline-block; width: 16px; height: 16px; margin-right: 5px; vertical-align: bottom; }
-    .tree-icon.disk { background-image: url('https://win98icons.alexmeub.com/icons/png/chm-4.png'); background-size: cover; }
+    .tree-icon.disk { background-image: url('../assets/icons/chm-4.png'); background-size: cover; }
     .content-padding { padding: 15px; }
     .form-group { margin-bottom: 8px; display: flex; align-items: center; }
     .form-group label { width: 60px; font-size: 12px;}
     .form-group input, .form-group textarea { flex-grow: 1; font-family: 'Segoe UI', sans-serif; font-size: 12px; padding: 2px; border: 2px inset #fff; }
+
+    /* --- TASKBAR DIVIDER --- */
+    .taskbar-divider {
+        width: 2px; height: 22px; margin: 0 2px;
+        border-left: 1px solid #808080;
+        border-right: 1px solid #fff;
+    }
+
+    /* --- NO SCROLL --- */
+    .no-scroll { overflow: hidden !important; }
+
+    /* --- CALC WRAPPER --- */
+    .calc-wrapper { padding: 5px; background: #c0c0c0; }
+    .calc-grid .red { color: #c00; font-weight: bold; }
+    .calc-grid .big-0 { grid-column: span 2; }
+
+    /* --- MS-DOS CONTENT --- */
+    .msdos-content { height: 100%; overflow-y: auto; }
+    .dos-input-line { display: flex; align-items: center; }
+    .dos-prompt { white-space: nowrap; margin-right: 4px; }
+
+    /* --- PAINT APP ROOT (iframe version) --- */
+    .paint-app-root { background: #c0c0c0; }
+
+    /* --- IE LOADING ANIMATION --- */
+    @keyframes ieLoad {
+        0% { margin-left: 0; width: 30%; }
+        50% { margin-left: 35%; width: 40%; }
+        100% { margin-left: 70%; width: 30%; }
+    }
+
+    /* --- MINESWEEPER --- */
+    .minesweeper-wrapper { background: #c0c0c0; padding: 6px; display: inline-block; }
+    .minesweeper-header { display: flex; justify-content: space-between; align-items: center; padding: 4px; margin-bottom: 6px; }
+    .ms-counter { background: #000; color: #f00; font-family: 'VT323', monospace; font-size: 24px; line-height: 1; padding: 2px 4px; border: 1px inset #fff; letter-spacing: 2px; }
+    .ms-face { width: 30px; height: 30px; font-size: 16px; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; }
+    .minesweeper-grid { display: grid; background: #808080; border: 2px inset #fff; gap: 1px; }
+    .ms-cell { width: 20px; height: 20px; background: #c0c0c0; border: 2px outset #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; user-select: none; font-size: 14px; line-height: 1; }
+    .ms-cell.revealed { border: 1px solid #808080; border-right-color: #dfdfdf; border-bottom-color: #dfdfdf; }
+    .ms-cell.mine { background: #f00; }
+    .ms-c1 { color: #0000ff; } .ms-c2 { color: #008000; } .ms-c3 { color: #ff0000; }
+    .ms-c4 { color: #000080; } .ms-c5 { color: #800000; } .ms-c6 { color: #008080; }
+    .ms-c7 { color: #000000; } .ms-c8 { color: #808080; }
+
+    /* --- MEDIA PLAYER --- */
+    .mp-visualizer { background: #000; color: #0f0; padding: 10px; font-family: 'VT323', monospace; display: flex; flex-direction: column; align-items: center; gap: 5px; height: 80px; }
+    .mp-title { font-size: 18px; text-transform: uppercase; animation: scroll 5s linear infinite; }
+    .mp-time { font-size: 24px; margin-top: auto; }
+    .mp-bars { display: flex; gap: 2px; align-items: flex-end; height: 20px; margin-top: auto; opacity: 0; }
+    .mp-bars.active { opacity: 1; }
+    .mp-bars span { width: 6px; background: #0f0; animation: bounce 0.5s ease infinite alternate; }
+    .mp-bars span:nth-child(2) { animation-delay: 0.1s; } .mp-bars span:nth-child(3) { animation-delay: 0.2s; }
+    .mp-bars span:nth-child(4) { animation-delay: 0.3s; } .mp-bars span:nth-child(5) { animation-delay: 0.4s; }
+    .mp-bars span:nth-child(6) { animation-delay: 0.2s; } .mp-bars span:nth-child(7) { animation-delay: 0.1s; }
+    .mp-bars span:nth-child(8) { animation-delay: 0.3s; } .mp-bars span:nth-child(9) { animation-delay: 0.5s; }
+    .mp-bars span:nth-child(10) { animation-delay: 0.4s; }
+    @keyframes bounce { 0% { height: 2px; } 100% { height: 20px; } }
+    @keyframes scroll { 0% { transform: translateX(50%); } 100% { transform: translateX(-50%); } }
+
+    /* --- CLIPPY ASSISTANT --- */
+    #clippy-container {
+        position: fixed; bottom: 40px; right: 20px; z-index: 50000;
+        display: flex; flex-direction: column; align-items: flex-end;
+    }
+    .clippy-bubble {
+        background: #ffffe1; border: 1px solid #000; padding: 12px; margin-bottom: 10px;
+        width: 200px; font-family: 'Segoe UI', sans-serif; font-size: 13px; color: #000;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3); position: relative;
+        display: none;
+    }
+    .clippy-bubble::after {
+        content: ''; position: absolute; bottom: -10px; right: 20px;
+        border-width: 10px 10px 0 0; border-style: solid; border-color: #ffffe1 transparent transparent transparent;
+    }
+    .clippy-bubble::before {
+        content: ''; position: absolute; bottom: -12px; right: 19px;
+        border-width: 11px 11px 0 0; border-style: solid; border-color: #000 transparent transparent transparent;
+    }
+    .clippy-actions { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
+    .clippy-actions .win95-btn { text-align: left; padding: 4px; display: block; width: 100%; box-sizing: border-box; }
+    #clippy-sprite {
+        width: 64px; height: 64px; cursor: pointer;
+        filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.5));
+        animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+        100% { transform: translateY(0px); }
+    }
+
+    /* --- MOBILE RESPONSIVENESS --- */
+    @media screen and (max-width: 600px) {
+        .window {
+            width: 98% !important;
+            max-width: 100vw;
+            max-height: 90vh;
+            left: 1% !important;
+        }
+        
+        #clippy-container {
+            bottom: 50px;
+            right: 10px;
+            transform: scale(0.8);
+            transform-origin: bottom right;
+        }
+        
+        .desktop-icon {
+            margin: 5px;
+        }
+        
+        #start-menu {
+            width: 200px;
+        }
+    }
